@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Appointment Booking - Vanamadevi CSC Center</title>
+  <style>
+    * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: #f4f7f6; margin: 0; padding: 20px; }
+    .container { max-width: 580px; margin: 20px auto; background: #ffffff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    
+    /* Header & Layout */
+    .header-logos { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+    .header-title { text-align: center; flex: 1; padding: 0 10px; }
+    .header-title h2 { color: #0056b3; margin: 0; font-size: 20px; }
+    .header-title p { color: #555; margin: 5px 0 0 0; font-size: 13px; font-weight: bold; }
+    .divider { height: 2px; background-color: #0056b3; margin-bottom: 20px; }
+
+    /* Form Styling */
+    .form-group { margin-bottom: 18px; }
+    label { display: block; margin-bottom: 6px; color: #333; font-weight: 600; font-size: 14px; }
+    input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
+    input:focus, select:focus { border-color: #0056b3; outline: none; }
+    .note { font-size: 12px; color: #d9534f; margin-top: 4px; display: block; }
+    .btn-submit { width: 100%; padding: 12px; background-color: #0056b3; color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; transition: background 0.3s; }
+    .btn-submit:hover { background-color: #003d80; }
+
+    /* Footer Styling */
+    .footer { margin-top: 30px; border-top: 1px solid #e0e0e0; padding-top: 15px; text-align: center; font-size: 12px; color: #555; line-height: 1.6; }
+    .footer strong { color: #222; }
+
+    /* Modal / Popup Base Styling */
+    .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 1000; }
+    .receipt-card { background: #fff; width: 90%; max-width: 480px; padding: 25px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); position: relative; }
+    .receipt-header { text-align: center; border-bottom: 2px dashed #0056b3; padding-bottom: 12px; margin-bottom: 15px; }
+    .receipt-header h3 { margin: 0; color: #0056b3; font-size: 18px; }
+    .receipt-header p { margin: 3px 0 0 0; font-size: 12px; color: #666; }
+    .receipt-table { width: 100%; margin-bottom: 20px; border-collapse: collapse; }
+    .receipt-table td { padding: 8px 4px; font-size: 14px; border-bottom: 1px solid #eee; }
+    .receipt-table td.label { font-weight: bold; color: #444; width: 40%; }
+    .receipt-table td.value { color: #111; }
+    .receipt-actions { display: flex; gap: 10px; margin-top: 15px; }
+    .btn-print { flex: 1; background: #28a745; color: white; border: none; padding: 10px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+    .btn-print:hover { background: #218838; }
+    .btn-close { flex: 1; background: #6c757d; color: white; border: none; padding: 10px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+    .btn-close:hover { background: #5a6268; }
+
+    /* Centered Alert Modal Styling */
+    .alert-card { background: #fff; width: 90%; max-width: 440px; padding: 25px; border-radius: 10px; box-shadow: 0 8px 20px rgba(0,0,0,0.25); text-align: center; }
+    .alert-icon { font-size: 38px; color: #d9534f; margin-bottom: 10px; }
+    .alert-title { font-size: 18px; font-weight: bold; color: #d9534f; margin-bottom: 12px; }
+    .alert-msg-en { font-size: 14px; color: #333; margin-bottom: 10px; line-height: 1.4; }
+    .alert-msg-ta { font-size: 14px; color: #0056b3; margin-bottom: 20px; line-height: 1.4; font-weight: 500; }
+    .btn-alert-ok { width: 100%; background: #d9534f; color: white; border: none; padding: 11px; border-radius: 6px; font-size: 15px; font-weight: bold; cursor: pointer; }
+    .btn-alert-ok:hover { background: #c9302c; }
+
+    /* Print Styles */
+    @media print {
+      body * { visibility: hidden; }
+      #receiptModal, #receiptModal * { visibility: visible; }
+      #receiptModal { position: absolute; left: 0; top: 0; width: 100%; height: 100%; background: white; }
+      .receipt-card { box-shadow: none; border: 1px solid #000; width: 100%; max-width: 100%; }
+      .receipt-actions { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header-logos">
+    <div class="header-title">
+      <h2>Vanamadevi CSC Center / வனமாதேவி பொது சேவை மையம்</h2>
+      <p>Service Appointment Booking / சேவை முன்பதிவு</p>
+    </div>
+  </div>
+  <div class="divider"></div>
+
+  <form id="appointmentForm">
+    <div class="form-group">
+      <label for="fullName">Full Name / முழுப் பெயர்</label>
+      <input type="text" id="fullName" name="fullName" placeholder="Enter full name" required>
+    </div>
+
+    <div class="form-group">
+      <label for="phone">Mobile Number / கைபேசி எண்</label>
+      <input type="tel" id="phone" name="phone" placeholder="10-digit mobile number" pattern="[0-9]{10}" required>
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email Address / மின்னஞ்சல் முகவரி</label>
+      <input type="email" id="email" name="email" placeholder="Enter email to receive appointment slip" required>
+    </div>
+
+    <div class="form-group">
+      <label for="service">Required Service / தேவையான சேவை</label>
+      <select id="service" name="service" required>
+        <option value="">-- Select Service / சேவையைத் தேர்ந்தெடுக்கவும் --</option>
+        <option value="Address Update">Aadhaar Address Update</option>
+        <option value="Mobile Number Update">Aadhaar Mobile Number Update</option>
+        <option value="PVC Card Order">Aadhaar PVC Card Order</option>
+        <option value="New PAN Card">New PAN Card</option>
+        <option value="Update PAN Card">Update PAN Card</option>
+        <option value="New Passport Service">New Passport Service</option>
+        <option value="Update Passport Service">Update Passport Service</option>
+        <option value="Axis Bank PMJDY Account">Axis Bank (PMJDY) Zero Balance Account Opening</option>
+        <option value="New Ration Card Application">New Ration Card Application</option>
+        <option value="Ration Card Update">Ration Card Update</option>
+        <option value="New Resume Printing">New Resume Printing</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="date">Preferred Date (Saturday & Sunday Only) / தேதி (சனி மற்றும் ஞாயிறு மட்டும்)</label>
+      <input type="date" id="date" name="date" required>
+      <span class="note">* Appointments are only available on Saturdays and Sundays. / சனி மற்றும் ஞாயிற்றுக்கிழமைகளில் மட்டுமே முன்பதிவு செய்ய முடியும்.</span>
+    </div>
+
+    <div class="form-group">
+      <label for="time">Visiting time / வருகை நேரம் (9:30 AM - 6:30 PM)</label>
+      <select id="time" name="time" required>
+        <option value="">-- Select Visiting Time / நேரத்தைத் தேர்ந்தெடுக்கவும் --</option>
+        <option value="09:30 AM - 10:30 AM">09:30 AM - 10:30 AM</option>
+        <option value="10:30 AM - 11:30 AM">10:30 AM - 11:30 AM</option>
+        <option value="11:30 AM - 12:30 PM">11:30 AM - 12:30 PM</option>
+        <option value="12:30 PM - 01:30 PM">12:30 PM - 01:30 PM</option>
+        <option value="02:30 PM - 03:30 PM">02:30 PM - 03:30 PM</option>
+        <option value="03:30 PM - 04:30 PM">03:30 PM - 04:30 PM</option>
+        <option value="04:30 PM - 05:30 PM">04:30 PM - 05:30 PM</option>
+        <option value="05:30 PM - 06:30 PM">05:30 PM - 06:30 PM</option>
+      </select>
+    </div>
+
+    <button type="submit" id="submitBtn" class="btn-submit">Book Appointment / முன்பதிவு செய்</button>
+  </form>
+
+  <div class="footer">
+    Developed by <strong>Ajith</strong>, CSC VLE/RAP<br>
+    CSC eGovernance Services India Ltd.<br>
+    Contact : 08778750680 | e-Mail : csc607105@gmail.com
+  </div>
+</div>
+
+<!-- Receipt Modal Popup -->
+<div id="receiptModal" class="modal-overlay">
+  <div class="receipt-card">
+    <div class="receipt-header">
+      <h3>Vanamadevi CSC Center</h3>
+      <p>Appointment Booking Slip (Emailed Successfully)</p>
+    </div>
+    
+    <table class="receipt-table">
+      <tr>
+        <td class="label">Customer Name:</td>
+        <td class="value" id="recName"></td>
+      </tr>
+      <tr>
+        <td class="label">Mobile Number:</td>
+        <td class="value" id="recPhone"></td>
+      </tr>
+      <tr>
+        <td class="label">Email Address:</td>
+        <td class="value" id="recEmail"></td>
+      </tr>
+      <tr>
+        <td class="label">Service Required:</td>
+        <td class="value" id="recService"></td>
+      </tr>
+      <tr>
+        <td class="label">Appointment Date:</td>
+        <td class="value" id="recDate"></td>
+      </tr>
+      <tr>
+        <td class="label">Visiting Time:</td>
+        <td class="value" id="recTime"></td>
+      </tr>
+      <tr>
+        <td class="label">Booking Ref:</td>
+        <td class="value" id="recRef"></td>
+      </tr>
+    </table>
+
+    <div class="receipt-actions">
+      <button class="btn-print" onclick="window.print()">Print Receipt / Save PDF</button>
+      <button class="btn-close" onclick="closeModal('receiptModal')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Centered Warning / Error Alert Modal -->
+<div id="alertModal" class="modal-overlay">
+  <div class="alert-card">
+    <div class="alert-icon">⚠️</div>
+    <div class="alert-title">Slot Already Booked! / ஏற்கனவே முன்பதிவு செய்யப்பட்டுள்ளது!</div>
+    <div class="alert-msg-en" id="alertMsgEn"></div>
+    <div class="alert-msg-ta" id="alertMsgTa"></div>
+    <button class="btn-alert-ok" onclick="closeModal('alertModal')">OK / சரி</button>
+  </div>
+</div>
+
+<script>
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbysDYCv8JTQsNnbyless8WHnG6ERb_wZyfdrlH6jaKeP91lTyAc8g7xyHrcpIMo3buA/exec';
+  
+  const form = document.getElementById('appointmentForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const dateInput = document.getElementById('date');
+
+  dateInput.min = new Date().toISOString().split('T')[0];
+
+  dateInput.addEventListener('change', function() {
+    const selectedDate = new Date(this.value);
+    const day = selectedDate.getUTCDay();
+    
+    if (day !== 0 && day !== 6) {
+      showAlertModal(
+        'Appointments are only available on Saturdays and Sundays. Please select a weekend date.',
+        'சனி மற்றும் ஞாயிற்றுக்கிழமைகளில் மட்டுமே முன்பதிவு செய்ய முடியும். தயவுசெய்து வார இறுதி நாளைத் தேர்ந்தெடுக்கவும்.'
+      );
+      this.value = '';
+    }
+  });
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    submitBtn.disabled = true;
+    submitBtn.innerText = 'Submitting & Emailing Slip...';
+
+    const formData = {
+      fullName: form.fullName.value,
+      phone: form.phone.value,
+      email: form.email.value,
+      service: form.service.value,
+      date: form.date.value,
+      time: form.time.value
+    };
+
+    fetch(scriptURL, {
+      method: 'POST',
+      body: JSON.stringify(formData)
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.status === 'success') {
+        document.getElementById('recName').innerText = formData.fullName;
+        document.getElementById('recPhone').innerText = formData.phone;
+        document.getElementById('recEmail').innerText = formData.email;
+        document.getElementById('recService').innerText = formData.service;
+        document.getElementById('recDate').innerText = formData.date;
+        document.getElementById('recTime').innerText = formData.time;
+        document.getElementById('recRef').innerText = data.refNumber;
+
+        document.getElementById('receiptModal').style.display = 'flex';
+        form.reset();
+      } else {
+        showAlertModal(
+          data.message_en || 'Selected time slot is already booked.',
+          data.message_ta || 'தேர்ந்தெடுக்கப்பட்ட நேரம் ஏற்கனவே முன்பதிவு செய்யப்பட்டுள்ளது.'
+        );
+      }
+      submitBtn.disabled = false;
+      submitBtn.innerText = 'Book Appointment / முன்பதிவு செய்';
+    })
+    .catch(error => {
+      showAlertModal(
+        'Error submitting appointment. Please try again.',
+        'முன்பதிவைச் சமர்ப்பிப்பதில் பிழை ஏற்பட்டது. மீண்டும் முயற்சிக்கவும்.'
+      );
+      submitBtn.disabled = false;
+      submitBtn.innerText = 'Book Appointment / முன்பதிவு செய்';
+    });
+  });
+
+  function showAlertModal(msgEn, msgTa) {
+    document.getElementById('alertMsgEn').innerText = msgEn;
+    document.getElementById('alertMsgTa').innerText = msgTa;
+    document.getElementById('alertModal').style.display = 'flex';
+  }
+
+  function closeModal(modalId) {
+    document.getElementById(modalId).style.display = 'none';
+  }
+</script>
+
+</body>
+</html>
