@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSC & இ-சேவை Digital Portal</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+        }
+        .no-select {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-6px); }
+            40%, 80% { transform: translateX(6px); }
+        }
+        .animate-shake {
+            animation: shake 0.4s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-50 via-blue-50/50 to-orange-50/50 min-h-screen flex flex-col justify-between text-slate-800 antialiased no-select">
+
+    <!-- Header / Navigation -->
+    <header class="w-full bg-white/90 backdrop-blur-md sticky top-0 z-40 shadow-sm border-b border-slate-200/80 py-4 px-6 md:px-12">
+        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <!-- CSC Official Custom Logo & Title Badge -->
+            <div class="flex items-center space-x-3.5">
+                <!-- Circular Emblem Image from User's Raw GitHub Repository -->
+                <div class="relative w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0 group">
+                    <img src="https://raw.githubusercontent.com/vcscegov/Appointment/refs/heads/main/cscmylogo.jpg" 
+                         alt="CSC Vanamadevi Emblem" 
+                         class="w-full h-full object-cover rounded-full border-2 border-amber-400/80 shadow-md transition-transform duration-300 group-hover:scale-105"
+                         onerror="this.onerror=null; this.src='https://placehold.co/200x200/034b82/ffffff?text=CSC+Vanamadevi';" />
+                </div>
+
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h1 class="text-xl font-extrabold text-slate-900 tracking-tight">CSC</h1>
+                        <span class="bg-orange-100 text-orange-700 text-[10px] font-extrabold px-2 py-0.5 rounded-md uppercase tracking-wider">Vanamadevi</span>
+                    </div>
+                    <p class="text-xs font-semibold text-blue-700">CSC E-Governance Services India Ltd</p>
+                    <p class="text-[11px] font-medium text-slate-500">Center ID: <span class="font-bold text-slate-800">255224320013</span> • Cuddalore</p>
+                </div>
+            </div>
+
+            <!-- Quick Badge -->
+            <div class="bg-blue-50 border border-blue-200/80 text-blue-700 px-4 py-1.5 rounded-full text-xs font-semibold flex items-center gap-2 shadow-inner">
+                <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                </span>
+                Authorized Service Centre
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Hub -->
+    <main class="max-w-5xl mx-auto px-6 py-10 w-full flex-grow">
+        <div class="text-center mb-10">
+            <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight sm:text-4xl mb-2">
+                Quick Access Dashboard
+            </h2>
+            <p class="text-slate-600 max-w-xl mx-auto text-sm sm:text-base">
+                Select a service portal below to proceed. Protected portals require credential authentication prior to redirecting in a new tab.
+            </p>
+        </div>
+
+        <!-- Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            <!-- 1. Customer Data Entry (Auth Modal Trigger) -->
+            <button id="btnDataEntry" type="button" 
+               class="group text-left bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm transition-all duration-300 card-hover flex items-start gap-4 w-full cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500/40">
+                <div class="bg-gradient-to-br from-blue-500 to-blue-600 text-white p-4 rounded-xl shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform flex-shrink-0">
+                    <i class="fa-solid fa-user-pen text-xl"></i>
+                </div>
+                <div class="flex-grow">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-bold text-lg text-slate-900 group-hover:text-blue-600 transition-colors">Customer Data Entry</h3>
+                        <span class="bg-amber-100 text-amber-700 text-[11px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1">
+                            <i class="fa-solid fa-lock text-[10px]"></i> Auth Required
+                        </span>
+                    </div>
+                    <p class="text-slate-500 text-sm mt-1.5 leading-relaxed">
+                        Input and register new customer details. Requires password login authentication to proceed.
+                    </p>
+                </div>
+            </button>
+
+            <!-- 2. Book Appointment Link (Direct New Tab) -->
+            <a href="https://vcsc.co.in/eGov" target="_blank" rel="noopener noreferrer" 
+               class="group bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm transition-all duration-300 card-hover flex items-start gap-4 focus:outline-none focus:ring-2 focus:ring-orange-500/40">
+                <div class="bg-gradient-to-br from-orange-500 to-amber-500 text-white p-4 rounded-xl shadow-md shadow-orange-500/20 group-hover:scale-105 transition-transform flex-shrink-0">
+                    <i class="fa-solid fa-calendar-check text-xl"></i>
+                </div>
+                <div class="flex-grow">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-bold text-lg text-slate-900 group-hover:text-orange-600 transition-colors">Book Appointment For CSC/eSevai Services Link</h3>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-slate-400 group-hover:text-orange-500 text-sm"></i>
+                    </div>
+                    <p class="text-slate-500 text-sm mt-1.5 leading-relaxed">
+                        Schedule time slots for CSC, இ-சேவை, Aadhaar, and other verified citizen administrative services.
+                    </p>
+                </div>
+            </a>
+
+            <!-- 3. CSC Appointment Details (Auth Modal Trigger) -->
+            <button id="btnAppointmentDetails" type="button" 
+               class="group text-left bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm transition-all duration-300 card-hover flex items-start gap-4 w-full cursor-pointer focus:outline-none focus:ring-2 focus:ring-emerald-500/40">
+                <div class="bg-gradient-to-br from-emerald-500 to-teal-600 text-white p-4 rounded-xl shadow-md shadow-emerald-500/20 group-hover:scale-105 transition-transform flex-shrink-0">
+                    <i class="fa-solid fa-list-check text-xl"></i>
+                </div>
+                <div class="flex-grow">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-bold text-lg text-slate-900 group-hover:text-emerald-600 transition-colors">CSC Appointment Details Link</h3>
+                        <span class="bg-amber-100 text-amber-700 text-[11px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1">
+                            <i class="fa-solid fa-lock text-[10px]"></i> Auth Required
+                        </span>
+                    </div>
+                    <p class="text-slate-500 text-sm mt-1.5 leading-relaxed">
+                        Track scheduled time slots and verify status. Requires password login authentication to proceed.
+                    </p>
+                </div>
+            </button>
+
+            <!-- 4. Download Form Link (Direct New Tab) -->
+            <a href="https://vcscegov.github.io/Forms/Forms.html" target="_blank" rel="noopener noreferrer" 
+               class="group bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm transition-all duration-300 card-hover flex items-start gap-4 focus:outline-none focus:ring-2 focus:ring-indigo-500/40">
+                <div class="bg-gradient-to-br from-indigo-500 to-purple-600 text-white p-4 rounded-xl shadow-md shadow-indigo-500/20 group-hover:scale-105 transition-transform flex-shrink-0">
+                    <i class="fa-solid fa-file-arrow-down text-xl"></i>
+                </div>
+                <div class="flex-grow">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-bold text-lg text-slate-900 group-hover:text-indigo-600 transition-colors">Download Form Link</h3>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-slate-400 group-hover:text-indigo-500 text-sm"></i>
+                    </div>
+                    <p class="text-slate-500 text-sm mt-1.5 leading-relaxed">
+                        Access official application forms, affidavit formats, standard templates, and guidelines.
+                    </p>
+                </div>
+            </a>
+
+        </div>
+    </main>
+
+    <!-- Interactive Authentication Modal -->
+    <div id="authModal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
+        <div id="modalBox" class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-6 sm:p-8 border border-slate-100 transition-all">
+            
+            <!-- Header -->
+            <div class="flex justify-between items-start mb-6">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-blue-50 text-blue-600 p-3 rounded-2xl border border-blue-100">
+                        <i class="fa-solid fa-shield-halved text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 id="modalTitle" class="font-extrabold text-lg text-slate-900">Portal Security Verification</h3>
+                        <p class="text-xs font-medium text-slate-500">Enter authorized credentials to continue</p>
+                    </div>
+                </div>
+                <button id="btnCloseModal" type="button" class="text-slate-400 hover:text-slate-600 hover:bg-slate-100 p-1.5 rounded-xl transition-colors cursor-pointer">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Inline Error Message Banner -->
+            <div id="errorMessage" class="hidden mb-4 p-3.5 bg-red-50 border border-red-200/80 text-red-700 text-xs font-semibold rounded-xl flex items-center gap-2.5">
+                <i class="fa-solid fa-circle-exclamation text-base text-red-500 flex-shrink-0"></i>
+                <span>Invalid User Name or Password. Please try again.</span>
+            </div>
+
+            <!-- Login Form -->
+            <form id="authForm" class="space-y-4" autocomplete="off" onsubmit="return false;">
+                
+                <!-- Username Field -->
+                <div>
+                    <label for="inputUsername" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">User Name</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                            <i class="fa-solid fa-user text-sm"></i>
+                        </div>
+                        <input type="text" id="inputUsername" placeholder="Enter User Name" 
+                               class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-900 placeholder:text-slate-400 focus:outline-none focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all">
+                    </div>
+                </div>
+
+                <!-- Password Field -->
+                <div>
+                    <label for="inputPassword" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Password</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                            <i class="fa-solid fa-lock text-sm"></i>
+                        </div>
+                        <input type="password" id="inputPassword" placeholder="Enter Password" 
+                               class="w-full pl-10 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-900 placeholder:text-slate-400 focus:outline-none focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all">
+                        <button type="button" id="btnTogglePassword" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 cursor-pointer">
+                            <i class="fa-solid fa-eye text-sm" id="eyeIcon"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="pt-2 flex flex-col gap-2">
+                    <button id="btnAuthenticate" type="submit" 
+                            class="w-full bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold py-3 px-4 rounded-xl shadow-md shadow-blue-500/20 transition-all flex items-center justify-center gap-2 cursor-pointer">
+                        <span id="btnText">Authenticate & Open</span>
+                        <i class="fa-solid fa-arrow-right text-sm"></i>
+                    </button>
+                    <button id="btnCancelModal" type="button" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-2.5 px-4 rounded-xl transition-colors text-sm cursor-pointer">
+                        Clear & Close
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Right Click Alert Notification Toast -->
+    <div id="securityToast" class="fixed bottom-6 right-6 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-2xl text-xs font-semibold flex items-center gap-3 transition-all transform translate-y-20 opacity-0 z-50 pointer-events-none border border-slate-700">
+        <i class="fa-solid fa-shield-cat text-amber-400 text-base"></i>
+        <span>Right-click is disabled on this portal for security reasons.</span>
+    </div>
+
+    <!-- Professional Footer -->
+    <footer class="w-full bg-white border-t border-slate-200/80 py-6 px-4 text-center mt-auto">
+        <div class="max-w-4xl mx-auto flex flex-col items-center justify-center space-y-1">
+            <p class="text-slate-800 text-sm font-medium">
+                Developed by <span class="font-bold text-slate-900">Ajith</span>, CSC VLE/RAP
+            </p>
+            <p class="text-slate-500 text-xs font-medium">
+                CSC eGovernance Services India Ltd
+            </p>
+        </div>
+    </footer>
+
+    <!-- Page Logic & Security Engine -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Target Links
+            const DATA_ENTRY_URL = "https://script.google.com/macros/s/AKfycbx9z7HI_2CaflS1mNzGeAOBl-mdtf0T5K_RGLAtZCIai3QZvBrOP0rkFKP8XRYoin4/exec";
+            const APPOINTMENT_DETAILS_URL = "https://vcsc.co.in/Data";
+
+            let targetUrl = "";
+
+            // UI Elements
+            const authModal = document.getElementById('authModal');
+            const modalBox = document.getElementById('modalBox');
+            const modalTitle = document.getElementById('modalTitle');
+            const errorMessage = document.getElementById('errorMessage');
+            const authForm = document.getElementById('authForm');
+            const inputUsername = document.getElementById('inputUsername');
+            const inputPassword = document.getElementById('inputPassword');
+            const btnTogglePassword = document.getElementById('btnTogglePassword');
+            const eyeIcon = document.getElementById('eyeIcon');
+            const securityToast = document.getElementById('securityToast');
+            
+            const btnDataEntry = document.getElementById('btnDataEntry');
+            const btnAppointmentDetails = document.getElementById('btnAppointmentDetails');
+            const btnCloseModal = document.getElementById('btnCloseModal');
+            const btnCancelModal = document.getElementById('btnCancelModal');
+
+            // --- PAGE-WIDE SECURITY IMPLEMENTATION ---
+            // 1. Disable Right-Click Globally across entire document
+            document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                showSecurityToast();
+            });
+
+            // 2. Prevent Developer Tool Keyboard Shortcuts globally
+            document.addEventListener('keydown', function(e) {
+                // Block F12
+                if (e.key === 'F12' || e.keyCode === 123) {
+                    e.preventDefault();
+                    showSecurityToast();
+                }
+                // Block Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C (Dev tools)
+                if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) {
+                    e.preventDefault();
+                    showSecurityToast();
+                }
+                // Block Ctrl+U (View Source) & Ctrl+S (Save Page)
+                if (e.ctrlKey && (e.key === 'u' || e.key === 'U' || e.key === 's' || e.key === 'S')) {
+                    e.preventDefault();
+                    showSecurityToast();
+                }
+            });
+
+            let toastTimeout;
+            function showSecurityToast() {
+                securityToast.classList.remove('translate-y-20', 'opacity-0');
+                securityToast.classList.add('translate-y-0', 'opacity-100');
+                clearTimeout(toastTimeout);
+                toastTimeout = setTimeout(() => {
+                    securityToast.classList.remove('translate-y-0', 'opacity-100');
+                    securityToast.classList.add('translate-y-20', 'opacity-0');
+                }, 2500);
+            }
+
+            // Show Modal Function
+            function openModal(title, destination) {
+                targetUrl = destination;
+                modalTitle.textContent = title;
+                
+                // Reset inputs and error state
+                inputUsername.value = '';
+                inputPassword.value = '';
+                inputPassword.type = 'password';
+                eyeIcon.className = 'fa-solid fa-eye text-sm';
+                errorMessage.classList.add('hidden');
+                modalBox.classList.remove('animate-shake');
+
+                authModal.classList.remove('hidden');
+                authModal.classList.add('flex');
+
+                setTimeout(() => {
+                    inputUsername.focus();
+                }, 100);
+            }
+
+            // Hide Modal Function
+            function closeModal() {
+                authModal.classList.remove('flex');
+                authModal.classList.add('hidden');
+                targetUrl = "";
+            }
+
+            // Password Visibility Toggle
+            btnTogglePassword.addEventListener('click', function() {
+                if (inputPassword.type === 'password') {
+                    inputPassword.type = 'text';
+                    eyeIcon.className = 'fa-solid fa-eye-slash text-sm text-blue-600';
+                } else {
+                    inputPassword.type = 'password';
+                    eyeIcon.className = 'fa-solid fa-eye text-sm';
+                }
+            });
+
+            // Authentication Handler
+            function handleAuthentication() {
+                const usernameVal = inputUsername.value.trim();
+                const passwordVal = inputPassword.value.trim();
+
+                // Validation against required credentials
+                if (usernameVal === "255224320013" && passwordVal === "csc100@Aj") {
+                    errorMessage.classList.add('hidden');
+                    
+                    if (targetUrl) {
+                        window.open(targetUrl, '_blank', 'noopener,noreferrer');
+                    }
+                    closeModal();
+                } else {
+                    errorMessage.classList.remove('hidden');
+                    modalBox.classList.remove('animate-shake');
+                    void modalBox.offsetWidth; // Trigger reflow for CSS animation restart
+                    modalBox.classList.add('animate-shake');
+                    inputPassword.value = '';
+                    inputPassword.focus();
+                }
+            }
+
+            // Event Listeners
+            btnDataEntry.addEventListener('click', function() {
+                openModal('Customer Data Entry Verification', DATA_ENTRY_URL);
+            });
+
+            btnAppointmentDetails.addEventListener('click', function() {
+                openModal('CSC Appointment Details Verification', APPOINTMENT_DETAILS_URL);
+            });
+
+            btnCloseModal.addEventListener('click', closeModal);
+            btnCancelModal.addEventListener('click', closeModal);
+
+            authForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                handleAuthentication();
+            });
+
+            // Close on background backdrop click
+            authModal.addEventListener('click', function(e) {
+                if (e.target === authModal) {
+                    closeModal();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
