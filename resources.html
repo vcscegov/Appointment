@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery - Vanamadevi CSC Center</title>
+    <style>
+        /* ===================================================
+           COLOR PALETTE & CSS VARIABLES (Classic Blue Theme)
+        =================================================== */
+        :root {
+            --primary-color: #0d47a1;     /* Deep CSC Blue */
+            --secondary-color: #1565c0;   /* Bright Accent Blue */
+            --accent-orange: #f57c00;     /* Highlight Orange */
+            --bg-light: #f8f9fa;          /* Page Background */
+            --card-bg: #ffffff;           /* Content Card Background */
+            --text-dark: #212529;          /* Main Text Color */
+            --text-muted: #6c757d;         /* Secondary Text Color */
+            --footer-bg: #1a252f;         /* Footer Background */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* --- TOP UTILITY BAR --- */
+        .top-bar {
+            background-color: #eef2f5;
+            padding: 6px 5%;
+            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        /* --- HEADER & LOGO --- */
+        header {
+            background-color: #ffffff;
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-brand h1 {
+            font-size: 22px;
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        .custom-logo {
+            height: 60px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .digital-india-logo {
+            height: 50px;
+        }
+
+        /* --- CLASSIC BLUE NAVIGATION BAR --- */
+        nav {
+            background-color: var(--primary-color);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            padding: 0 5%;
+        }
+
+        nav ul li a {
+            display: block;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 12px 18px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+
+        nav ul li a:hover, nav ul li a.active {
+            background-color: var(--secondary-color);
+        }
+
+        /* --- CONTAINER & PAGE TITLE --- */
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .page-title {
+            color: var(--primary-color);
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+            padding-bottom: 8px;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 3px;
+            background-color: var(--accent-orange);
+        }
+
+        /* --- GALLERY GRID & IMAGE CARDS --- */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 1024px) {
+            .gallery-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .gallery-card {
+            background: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #e2e8f0;
+        }
+
+        .gallery-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .gallery-img-wrapper {
+            width: 100%;
+            height: 180px;
+            overflow: hidden;
+            background-color: #f1f5f9;
+        }
+
+        .gallery-img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .gallery-caption {
+            padding: 12px 15px;
+            font-size: 13.5px;
+            font-weight: 600;
+            color: var(--text-dark);
+            text-align: center;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background-color: var(--footer-bg);
+            color: #ffffff;
+            padding: 25px 5% 15px;
+            font-size: 13px;
+            margin-top: 40px;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+
+        .footer-links a {
+            color: #d0dbe5;
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+
+        .copyright {
+            text-align: center;
+            color: #888;
+            border-top: 1px solid #334455;
+            padding-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TOP INFO BAR -->
+    <div class="top-bar">
+        <div><strong>Helpdesk:</strong> 14599 (Citizen & VLE) | Working Hours: 9:30 AM to 6:00 PM</div>
+        <div>Vanamadevi Common Services Centre</div>
+    </div>
+
+    <!-- MAIN HEADER -->
+    <header>
+        <div class="header-brand">
+            <img src="https://raw.githubusercontent.com/vcscegov/Appointment/refs/heads/main/cscmylogo.jpg" alt="CSC Logo" class="custom-logo">
+            <div>
+                <h1>Common Services Centre</h1>
+                <small style="color: var(--text-muted);">Vanamadevi, Cuddalore District</small>
+            </div>
+        </div>
+        <div>
+            <img src="https://upload.wikimedia.org/wikipedia/en/9/95/Digital_India_logo.svg" alt="Digital India Logo" class="digital-india-logo">
+        </div>
+    </header>
+
+    <!-- CLASSIC BLUE NAVIGATION BAR -->
+    <nav>
+        <ul>
+            <li><a href="index.html">HOME</a></li>
+            <li><a href="about.html">ABOUT US</a></li>
+            <li><a href="services.html">SERVICES</a></li>
+            <li><a href="projects.html">PROJECTS</a></li>
+            <li><a href="resources.html" class="active">GALLERY</a></li>
+            <li><a href="contact.html">CONTACT US</a></li>
+        </ul>
+    </nav>
+
+    <!-- MAIN CONTENT AREA -->
+    <div class="container">
+        <h2 class="page-title">CENTER GALLERY & ACTIVITIES</h2>
+
+        <div class="gallery-grid">
+            
+            <!-- DEMO IMAGE 1 -->
+            <div class="gallery-card">
+                <div class="gallery-img-wrapper">
+                    <img src="https://picsum.photos/400/300?random=1" alt="CSC Center Activities">
+                </div>
+                <div class="gallery-caption">CSC Digital Training Session</div>
+            </div>
+
+            <!-- DEMO IMAGE 2 -->
+            <div class="gallery-card">
+                <div class="gallery-img-wrapper">
+                    <img src="https://picsum.photos/400/300?random=2" alt="Aadhaar Services">
+                </div>
+                <div class="gallery-caption">Aadhaar & Citizen Assistance</div>
+            </div>
+
+            <!-- DEMO IMAGE 3 -->
+            <div class="gallery-card">
+                <div class="gallery-img-wrapper">
+                    <img src="https://picsum.photos/400/300?random=3" alt="Banking Services">
+                </div>
+                <div class="gallery-caption">Banking Services Point</div>
+            </div>
+
+            <!-- DEMO IMAGE 4 -->
+            <div class="gallery-card">
+                <div class="gallery-img-wrapper">
+                    <img src="https://picsum.photos/400/300?random=4" alt="Digital Library">
+                </div>
+                <div class="gallery-caption">CSC Academy Digital Library</div>
+            </div>
+
+            <!-- DEMO IMAGE 5 -->
+            <div class="gallery-card">
+                <div class="gallery-img-wrapper">
+                    <img src="https://picsum.photos/400/300?random=5" alt="Farmer Enrolment">
+                </div>
+                <div class="gallery-caption">Crop Insurance Enrolment Drive</div>
+            </div>
+
+            <!-- DEMO IMAGE 6 -->
+            <div class="gallery-card">
+                <div class="gallery-img-wrapper">
+                    <img src="https://picsum.photos/400/300?random=6" alt="Community Event">
+                </div>
+                <div class="gallery-caption">Village Awareness Program</div>
+            </div>
+
+            <!-- DEMO IMAGE 7 -->
+            <div class="gallery-card">
+                <div class="gallery-img-wrapper">
+                    <img src="https://picsum.photos/400/300?random=7" alt="e-Sevai Assistance">
+                </div>
+                <div class="gallery-caption">e-Services (இ-சேவை) Support</div>
+            </div>
+
+            <!-- DEMO IMAGE 8 -->
+            <div class="gallery-card">
+                <div class="gallery-img-wrapper">
+                    <img src="https://picsum.photos/400/300?random=8" alt="Student Training">
+                </div>
+                <div class="gallery-caption">Skill Development Training</div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-links">
+            <a href="index.html">Home</a> |
+            <a href="about.html">About Us</a> |
+            <a href="services.html">Services</a> |
+            <a href="projects.html">Projects</a> |
+            <a href="resources.html">Gallery</a> |
+            <a href="contact.html">Contact Us</a>
+        </div>
+        <div class="copyright">
+            Copyright &copy; Vanamadevi CSC Centre. Hosted via GitHub Pages.
+        </div>
+    </footer>
+
+</body>
+</html>

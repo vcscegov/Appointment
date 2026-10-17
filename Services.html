@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services - Vanamadevi CSC Center</title>
+    <style>
+        /* ===================================================
+           COLOR PALETTE & CSS VARIABLES (Classic Blue Theme)
+        =================================================== */
+        :root {
+            --primary-color: #0d47a1;     /* Deep CSC Blue */
+            --secondary-color: #1565c0;   /* Bright Accent Blue */
+            --bg-light: #f8f9fa;          /* Page Background */
+            --card-bg: #ffffff;           /* Content Card Background */
+            --text-dark: #212529;          /* Main Text Color */
+            --text-muted: #6c757d;         /* Secondary Text Color */
+            --footer-bg: #1a252f;         /* Footer Background */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* --- TOP UTILITY BAR --- */
+        .top-bar {
+            background-color: #eef2f5;
+            padding: 6px 5%;
+            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        /* --- HEADER & LOGO --- */
+        header {
+            background-color: #ffffff;
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-brand h1 {
+            font-size: 22px;
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        .custom-logo {
+            height: 60px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .digital-india-logo {
+            height: 50px;
+        }
+
+        /* --- NAVIGATION BAR --- */
+        nav {
+            background-color: var(--primary-color);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            padding: 0 5%;
+        }
+
+        nav ul li a {
+            display: block;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 12px 18px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+
+        nav ul li a:hover, nav ul li a.active {
+            background-color: var(--secondary-color);
+        }
+
+        /* --- CONTAINER & PAGE TITLE --- */
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .page-title {
+            color: var(--primary-color);
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+            padding-bottom: 8px;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 3px;
+            background-color: #f57c00;
+        }
+
+        /* --- 25 SERVICES GRID --- */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 1024px) {
+            .services-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* CARD STYLES & GRADIENTS */
+        .service-card {
+            border-radius: 12px;
+            padding: 25px 18px 18px;
+            min-height: 190px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+        }
+
+        /* Decorative Bubbles */
+        .service-card::before, .service-card::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+        }
+        .service-card::before {
+            width: 110px;
+            height: 110px;
+            right: -25px;
+            bottom: -25px;
+        }
+        .service-card::after {
+            width: 80px;
+            height: 80px;
+            right: 15px;
+            bottom: 10px;
+        }
+
+        /* Color Variations */
+        .card-pink { background: linear-gradient(135deg, #e91e63, #d81b60); }
+        .card-orange { background: linear-gradient(135deg, #f59e0b, #eb8900); }
+        .card-teal { background: linear-gradient(135deg, #2dd4bf, #14b8a6); }
+        .card-purple { background: linear-gradient(135deg, #a855f7, #8b5cf6); }
+        .card-blue { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+
+        .service-card h3 {
+            color: #ffffff;
+            font-size: 14.5px;
+            font-weight: 700;
+            line-height: 1.35;
+            z-index: 1;
+        }
+
+        /* START LEARN BUTTON */
+        .btn-learn {
+            background-color: #fef3c7;
+            color: #1f2937;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 8px 0;
+            width: 85%;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: background 0.2s ease;
+            z-index: 1;
+            display: inline-block;
+        }
+
+        .btn-learn:hover {
+            background-color: #ffffff;
+            color: #000000;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background-color: var(--footer-bg);
+            color: #ffffff;
+            padding: 25px 5% 15px;
+            font-size: 13px;
+            margin-top: 40px;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+
+        .footer-links a {
+            color: #d0dbe5;
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+
+        .copyright {
+            text-align: center;
+            color: #888;
+            border-top: 1px solid #334455;
+            padding-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TOP INFO BAR -->
+    <div class="top-bar">
+        <div><strong>Helpdesk:</strong> 14599 (Citizen & VLE) | Working Hours: 9:30 AM to 6:00 PM</div>
+        <div>Vanamadevi Common Services Centre</div>
+    </div>
+
+    <!-- MAIN HEADER -->
+    <header>
+        <div class="header-brand">
+            <img src="https://raw.githubusercontent.com/vcscegov/Appointment/refs/heads/main/cscmylogo.jpg" alt="CSC Logo" class="custom-logo">
+            <div>
+                <h1>Common Services Centre</h1>
+                <small style="color: var(--text-muted);">Vanamadevi, Cuddalore District</small>
+            </div>
+        </div>
+        <div>
+            <img src="https://upload.wikimedia.org/wikipedia/en/9/95/Digital_India_logo.svg" alt="Digital India Logo" class="digital-india-logo">
+        </div>
+    </header>
+
+    <!-- CLASSIC BLUE NAVIGATION BAR -->
+    <nav>
+        <ul>
+            <li><a href="index.html">HOME</a></li>
+            <li><a href="about.html">ABOUT US</a></li>
+            <li><a href="services.html" class="active">SERVICES</a></li>
+            <li><a href="projects.html">PROJECTS</a></li>
+            <li><a href="resources.html">RESOURCES</a></li>
+            <li><a href="contact.html">CONTACT US</a></li>
+        </ul>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <div class="container">
+        <h2 class="page-title">Citizen e-Services (இ-சேவை) & Schemes</h2>
+
+        <div class="services-grid">
+            
+            <!-- 1 to 5 -->
+            <div class="service-card card-pink">
+                <h3>Aadhaar Demographic & Biometric Update</h3>
+                <a href="https://vcsc.co.in/Test" target="_blank" class="btn-learn">Start Learn &rarr;</a>
+            </div>
+            <div class="service-card card-orange">
+                <h3>Community Certificate (சாதிச் சான்றிதழ்)</h3>
+                <a href="https://vcsc.co.in/Test" target="_blank" class="btn-learn">Start Learn &rarr;</a>
+            </div>
+            <div class="service-card card-teal">
+                <h3>Income Certificate (வருமானச் சான்றிதழ்)</h3>
+                <a href="https://vcsc.co.in/Test" target="_blank" class="btn-learn">Start Learn &rarr;</a>
+            </div>
+            <div class="service-card card-purple">
+                <h3>Nativity Certificate (இருப்பிடச் சான்றிதழ்)</h3>
+                <a href="https://vcsc.co.in/Test" target="_blank" class="btn-learn">Start Learn &rarr;</a>
+            </div>
+
+            <!-- 6 to 10 -->
+            <div class="service-card card-blue">
+                <h3>First Graduate Certificate</h3>
+                <a href="https://vcsc.co.in/Test" target="_blank" class="btn-learn">Start Learn &rarr;</a>
+            </div>
+            <div class="service-card card-pink">
+                <h3>Destitute Widow Certificate</h3>
+                <a href="https://vcsc.co.in/Test" target="_blank" class="btn-learn">Start Learn &rarr;</a>
+            </div>
+            <div class="service-card card-orange">
+                <h3>Unemployment Certificate</h3>
+                <a href="https://vcsc.co.in/Test" target="_blank" class="btn-learn">Start Learn &rarr;</a>
+            </div>
+            <div class="service-card card-teal">
+                <h3>Agricultural Income Certificate</h3>
+                <a href="https://vcsc.co.in/Test" target="_blank" class="btn-learn">Start Learn &rarr;</a>
+            </div>
+
+            <!-- 11 to 15 -->
+            <div class="service-card card-purple">
+                <h3>TNPDS Smart Card Services (New / Correction)</h3>
+                <a href="https://vcsc.co.in/Test" target="_blank" class="btn-learn">Start Learn &rarr;</a>
+            </div>
+            <div class="service-card card-blue">
+                <h3>CPGRAMS Public Grievance Redressal</h3>
+                <a href="https://vcsc.co.in/Test" target="_blank" class="btn-learn">Start Learn &rarr;</a>
+            </div>
+            <div class="service-card card-pink">
+                <h3>PM-SYM Pension Scheme</h3>
+                <a href="https://vcsc.co.in/Test" target="_blank" class="btn-learn">Start Learn &rarr;</a>
+            </div>
+            <div class="service-card card-orange">
+                <h3>Atal Pension Yojana (APY)</h3>
+                <a href="https://vcsc.co.in/Test" target="_blank" class="btn-learn">Start Learn &rarr;</a>
+            </div>
+
+            <!-- 16 to 20 -->
+            <div class="service-card card-teal">
+                <h3>National Pension System (NPS)</h3>
+                <a href="https://vcsc.co.in/Test" target="_blank" class="btn-learn">Start Learn &rarr;</a>
+            </div>
+            <div class="service-card card-purple">
+                <h3>e-Shram Portal Registration</h3>
+                <a href="https://vcsc.co.in/Test" target="_blank" class="btn-learn">Start Learn &rarr;</a>
+            </div>
+            <div class="service-card card-blue">
+                <h3>PM Vishwakarma Scheme</h3>
+                <a href="https://vcsc.co.in/Test" target="_blank" class="btn-learn">Start Learn &rarr;</a>
+            </div>
+            <div class="service-card card-pink">
+                <h3>Udyam MSME Registration</h3>
+                <a href="https://vcsc.co.in/Test" target="_blank" class="btn-learn">Start Learn &rarr;</a>
+            </div>
+
+            <!-- 21 to 25 -->
+            <div class="service-card card-orange">
+                <h3>Fasal Bima Yojana (Crop Insurance)</h3>
+                <a href="https://vcsc.co.in/Test" target="_blank" class="btn-learn">Start Learn &rarr;</a>
+            </div>
+            <div class="service-card card-teal">
+                <h3>SBI Business Correspondent Banking Services</h3>
+                <a href="https://vcsc.co.in/Test" target="_blank" class="btn-learn">Start Learn &rarr;</a>
+            </div>
+            <div class="service-card card-purple">
+                <h3>Electricity Bill Payment (TANGEDCO)</h3>
+                <a href="https://vcsc.co.in/Test" target="_blank" class="btn-learn">Start Learn &rarr;</a>
+            </div>
+            <div class="service-card card-blue">
+                <h3>PAN Card New & Corrections (UTI/NSDL)</h3>
+                <a href="https://vcsc.co.in/Test" target="_blank" class="btn-learn">Start Learn &rarr;</a>
+            </div>
+            <div class="service-card card-pink">
+                <h3>Voter ID Registration & Updates (NVSP)</h3>
+                <a href="https://vcsc.co.in/Test" target="_blank" class="btn-learn">Start Learn &rarr;</a>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-links">
+            <a href="index.html">Home</a> |
+            <a href="about.html">About Us</a> |
+            <a href="services.html">Services</a> |
+            <a href="projects.html">Projects</a> |
+            <a href="contact.html">Contact Us</a>
+        </div>
+        <div class="copyright">
+            Copyright &copy; Vanamadevi CSC Centre. Hosted via GitHub Pages.
+        </div>
+    </footer>
+
+</body>
+</html>
