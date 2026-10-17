@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSC & Digital India Services Portal | CSC முக்கிய சேவைகள் முகப்பு</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #003366;
+            --secondary-color: #ff9933;
+            --accent-color: #138808;
+            --light-bg: #f4f7f9;
+            --card-bg: #ffffff;
+            --text-dark: #222222;
+            --text-muted: #555555;
+            --border-color: #e0e0e0;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* Header & Navigation */
+        header {
+            background: #ffffff;
+            border-bottom: 3px solid var(--primary-color);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .brand-logos {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-logo-img {
+            max-height: 55px;
+            width: auto;
+            object-fit: contain;
+            display: block;
+        }
+
+        .lang-switch-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 6px rgba(0,51,102,0.2);
+        }
+
+        .lang-switch-btn:hover {
+            background-color: #002244;
+            transform: translateY(-1px);
+        }
+
+        /* Strict Language Visibility Rules */
+        /* Default State (English Mode) */
+        .lang-en {
+            display: block !important;
+        }
+
+        span.lang-en, i.lang-en {
+            display: inline-block !important;
+        }
+
+        .lang-ta {
+            display: none !important;
+        }
+
+        /* Tamil Mode (Triggered by .lang-tamil class on body) */
+        body.lang-tamil .lang-en {
+            display: none !important;
+        }
+
+        body.lang-tamil .lang-ta {
+            display: block !important;
+        }
+
+        body.lang-tamil span.lang-ta, body.lang-tamil i.lang-ta {
+            display: inline-block !important;
+        }
+
+        /* Hero Banner */
+        .hero {
+            background: linear-gradient(135deg, #003366 0%, #0055a5 100%);
+            color: white;
+            text-align: center;
+            padding: 35px 20px;
+            margin-bottom: 30px;
+        }
+
+        .hero h1 {
+            font-size: 26px;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 15px;
+            opacity: 0.95;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Main Content & Grid */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px 40px;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 22px;
+        }
+
+        /* Service Cards */
+        .service-card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+            padding: 20px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .service-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light-bg);
+        }
+
+        .card-icon {
+            width: 44px;
+            height: 44px;
+            background-color: #e8f0fe;
+            color: var(--primary-color);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .card-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .card-subtitle {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .card-links {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 9px 14px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 13.5px;
+            font-weight: 600;
+            transition: background 0.2s ease;
+            width: 100%;
+            text-align: center;
+        }
+
+        .btn-portal {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-portal:hover {
+            background-color: #002244;
+        }
+
+        .btn-video {
+            background-color: #fff3e6;
+            color: #d97706;
+            border: 1px solid #fcd34d;
+        }
+
+        .btn-video:hover {
+            background-color: #ffeacc;
+        }
+
+        .btn-app {
+            background-color: #e6f4ea;
+            color: #138808;
+            border: 1px solid #a8dab5;
+        }
+
+        .btn-app:hover {
+            background-color: #d2ebd9;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #0a192f;
+            color: #e6f1ff;
+            padding: 40px 20px 20px;
+            margin-top: 40px;
+            font-size: 14px;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #233554;
+        }
+
+        .footer-info h3 {
+            color: var(--secondary-color);
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+
+        .footer-info p {
+            margin-bottom: 8px;
+            color: #8892b0;
+            line-height: 1.5;
+        }
+
+        .footer-contact i {
+            width: 20px;
+            color: var(--secondary-color);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            color: #8892b0;
+            font-size: 13px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                align-items: center;
+                gap: 12px;
+            }
+
+            .header-logo-img {
+                max-height: 48px;
+            }
+
+            .lang-switch-btn {
+                align-self: center;
+            }
+
+            .hero h1 {
+                font-size: 20px;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <div class="header-container">
+            <div class="brand-logos">
+                <img src="https://raw.githubusercontent.com/vcscegov/Appointment/refs/heads/main/cscmylogo.jpg" alt="CSC Digital India Logo" class="header-logo-img">
+            </div>
+            <button class="lang-switch-btn" onclick="toggleLanguage()">
+                <i class="fa-solid fa-language"></i> 
+                <span class="lang-en">தமிழ்</span>
+                <span class="lang-ta">English</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Banner -->
+    <section class="hero">
+        <h1 class="lang-en">CSC Key Services – Official Portals & Training Videos</h1>
+        <h1 class="lang-ta">பொது சேவை மையம் (CSC) - முக்கிய சேவை இணையதளங்கள் மற்றும் பயிற்சி காணொளிகள்</h1>
+        
+        <p class="lang-en">All CSC VLE partners are requested to utilize these portal and training links to provide efficient, standard, and professional services to citizens.</p>
+        <p class="lang-ta">பொது சேவை மைய கிராமப்புற தொழில்முனைவோர் (CSC VLE) அனைவரும் இச்சேவை இணையதளங்கள் மற்றும் பயிற்சி காணொளிகளைப் பயன்படுத்தி பொதுமக்களுக்குச் செவ்வனே சேவை வழங்கிட வேண்டப்படுகிறார்கள்.</p>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="services-grid">
+
+            <!-- Card 1: PAN Card NSDL -->
+            <div class="service-card">
+                <div>
+                    <div class="card-header">
+                        <div class="card-icon"><i class="fa-solid fa-id-card"></i></div>
+                        <div>
+                            <div class="card-title lang-en">PAN Card Services (NSDL)</div>
+                            <div class="card-title lang-ta">பான் கார்டு சேவைகள் (NSDL)</div>
+                            
+                            <div class="card-subtitle lang-en">New Application & Correction</div>
+                            <div class="card-subtitle lang-ta">புதிய நிரந்தர கணக்கு எண் (பான் கார்டு) மற்றும் திருத்தங்கள்</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-links">
+                    <a href="https://egovcsc.csccloud.in" target="_blank" class="btn btn-portal">
+                        <i class="fa-solid fa-globe"></i> 
+                        <span class="lang-en">Access Portal</span>
+                        <span class="lang-ta">இணையதளம் செல்ல</span>
+                    </a>
+                    <a href="https://drive.google.com/file/d/1fkvfC-dsm8v1ASrBs2GB9Vc4HZk9PR0a/view?usp=sharing" target="_blank" class="btn btn-video">
+                        <i class="fa-solid fa-circle-play"></i> 
+                        <span class="lang-en">New PAN Process Video (93)</span>
+                        <span class="lang-ta">புதிய பான் கார்டு பயிற்சி வழிகாட்டி (93)</span>
+                    </a>
+                    <a href="https://drive.google.com/file/d/1HUjhIEIe3054wy-fcPjj7lObhnKQzGH5/view?usp=sharing" target="_blank" class="btn btn-video">
+                        <i class="fa-solid fa-circle-play"></i> 
+                        <span class="lang-en">PAN Correction Video (01)</span>
+                        <span class="lang-ta">பான் கார்டு திருத்தம் பயிற்சி வழிகாட்டி (01)</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Card 2: BBPS LITE -->
+            <div class="service-card">
+                <div>
+                    <div class="card-header">
+                        <div class="card-icon"><i class="fa-solid fa-file-invoice-dollar"></i></div>
+                        <div>
+                            <div class="card-title lang-en">BBPS LITE</div>
+                            <div class="card-title lang-ta">பாரத் பில் பேமெண்ட் சிஸ்டம் (BBPS LITE)</div>
+                            
+                            <div class="card-subtitle lang-en">Electricity Bill, Loan & Credit Card Repayment</div>
+                            <div class="card-subtitle lang-ta">மின்சாரக் கட்டணம், கடன் மற்றும் கடன் அட்டை செலுத்துதல்</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-links">
+                    <a href="https://billpaymentlite.csccloud.in" target="_blank" class="btn btn-portal">
+                        <i class="fa-solid fa-globe"></i> 
+                        <span class="lang-en">Access Portal</span>
+                        <span class="lang-ta">இணையதளம் செல்ல</span>
+                    </a>
+                    <a href="https://drive.google.com/file/d/1Gh6hLFvFiZZQnipMByscyKT5GtrcuyVs/view?usp=sharing" target="_blank" class="btn btn-video">
+                        <i class="fa-solid fa-circle-play"></i> 
+                        <span class="lang-en">Training Video</span>
+                        <span class="lang-ta">பயிற்சி காணொளி</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Card 3: Bank Statement Download -->
+            <div class="service-card">
+                <div>
+                    <div class="card-header">
+                        <div class="card-icon"><i class="fa-solid fa-file-pdf"></i></div>
+                        <div>
+                            <div class="card-title lang-en">Bank Statement Download</div>
+                            <div class="card-title lang-ta">வங்கி கணக்கு அறிக்கை பதிவிறக்கம்</div>
+                            
+                            <div class="card-subtitle lang-en">CSC Finduit Portal</div>
+                            <div class="card-subtitle lang-ta">சிஎஸ்சி ஃபைண்ட்யூட் இணையதளம் (CSC Finduit)</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-links">
+                    <a href="https://csc.finduit.in/" target="_blank" class="btn btn-portal">
+                        <i class="fa-solid fa-globe"></i> 
+                        <span class="lang-en">Access Portal</span>
+                        <span class="lang-ta">இணையதளம் செல்ல</span>
+                    </a>
+                    <a href="https://drive.google.com/file/d/1nOJoKAbB46stTiTZaDlDsierlfJR9qIn/view?usp=sharing" target="_blank" class="btn btn-video">
+                        <i class="fa-solid fa-circle-play"></i> 
+                        <span class="lang-en">Training Video</span>
+                        <span class="lang-ta">பயிற்சி காணொளி</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Card 4: CIBIL Report -->
+            <div class="service-card">
+                <div>
+                    <div class="card-header">
+                        <div class="card-icon"><i class="fa-solid fa-chart-line"></i></div>
+                        <div>
+                            <div class="card-title lang-en">CIBIL Score Report</div>
+                            <div class="card-title lang-ta">சிபில் (CIBIL) மதிப்பெண் அறிக்கை</div>
+                            
+                            <div class="card-subtitle lang-en">Credit Score Bureau Verification</div>
+                            <div class="card-subtitle lang-ta">வங்கி கடன் தகுதி (சிபில்) அறிக்கை அறிதல்</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-links">
+                    <a href="https://bureau.csccloud.in/" target="_blank" class="btn btn-portal">
+                        <i class="fa-solid fa-globe"></i> 
+                        <span class="lang-en">Access Portal</span>
+                        <span class="lang-ta">இணையதளம் செல்ல</span>
+                    </a>
+                    <a href="https://drive.google.com/file/d/1NeDQRCwvDFATYmwehxdBnWz-7POfYiH8/view?usp=sharing" target="_blank" class="btn btn-video">
+                        <i class="fa-solid fa-circle-play"></i> 
+                        <span class="lang-en">Training Video</span>
+                        <span class="lang-ta">பயிற்சி காணொளி</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Card 5: Passport Apply -->
+            <div class="service-card">
+                <div>
+                    <div class="card-header">
+                        <div class="card-icon"><i class="fa-solid fa-passport"></i></div>
+                        <div>
+                            <div class="card-title lang-en">Passport Application Services</div>
+                            <div class="card-title lang-ta">கடவுச்சீட்டு (பாஸ்போர்ட்) சேவைகள்</div>
+                            
+                            <div class="card-subtitle lang-en">Passport Registration & Processing</div>
+                            <div class="card-subtitle lang-ta">கடவுச்சீட்டு விண்ணப்பப் பதிவு மற்றும் வழிகாட்டி</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-links">
+                    <a href="https://drive.google.com/drive/folders/19MlFNnCZ9NP2YSB0mKJSSytB07AomSIt?usp=drive_link" target="_blank" class="btn btn-video">
+                        <i class="fa-solid fa-folder-open"></i> 
+                        <span class="lang-en">Training Video Folder</span>
+                        <span class="lang-ta">பயிற்சி காணொளிகள் கோப்பு</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Card 6: Jio Mobile Recharge -->
+            <div class="service-card">
+                <div>
+                    <div class="card-header">
+                        <div class="card-icon"><i class="fa-solid fa-mobile-screen-button"></i></div>
+                        <div>
+                            <div class="card-title lang-en">Jio Mobile Recharge</div>
+                            <div class="card-title lang-ta">ஜியோ கைப்பேசி மறுமின்னூட்டம்</div>
+                            
+                            <div class="card-subtitle lang-en">Jio Recharge Services</div>
+                            <div class="card-subtitle lang-ta">ஜியோ மொபைல் ரீசார்ஜ் சேவைகள்</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-links">
+                    <a href="https://telecom.csccloud.in/" target="_blank" class="btn btn-portal">
+                        <i class="fa-solid fa-globe"></i> 
+                        <span class="lang-en">Access Jio Telecom Portal</span>
+                        <span class="lang-ta">ஜியோ டெலிகாம் இணையதளம் செல்ல</span>
+                    </a>
+                    <a href="https://drive.google.com/drive/folders/16fWtwXTWF9_9" target="_blank" class="btn btn-video">
+                        <i class="fa-solid fa-folder-open"></i> 
+                        <span class="lang-en">Jio Training Videos Folder</span>
+                        <span class="lang-ta">ஜியோ பயிற்சி காணொளிகள் கோப்பு</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Card 7: CPGRAMS Services -->
+            <div class="service-card">
+                <div>
+                    <div class="card-header">
+                        <div class="card-icon"><i class="fa-solid fa-comments"></i></div>
+                        <div>
+                            <div class="card-title lang-en">CPGRAMS Services</div>
+                            <div class="card-title lang-ta">மத்திய அரசு பொது மக்கள் குறைதீர்ப்பு முறைமை (CPGRAMS)</div>
+                            
+                            <div class="card-subtitle lang-en">Public Grievance Redress and Monitoring System</div>
+                            <div class="card-subtitle lang-ta">மத்திய அரசு பொது மக்கள் குறைதீர்க்கும் சேவை</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-links">
+                    <a href="https://pgportal.gov.in/Signin" target="_blank" class="btn btn-portal">
+                        <i class="fa-solid fa-globe"></i> 
+                        <span class="lang-en">Access Portal</span>
+                        <span class="lang-ta">இணையதளம் செல்ல</span>
+                    </a>
+                    <a href="https://drive.google.com/file/d/1jh4cXlUmU2OHx5zRhoZ4TOVPYN227f_w/view?usp=sharing" target="_blank" class="btn btn-video">
+                        <i class="fa-solid fa-circle-play"></i> 
+                        <span class="lang-en">Training Video</span>
+                        <span class="lang-ta">பயிற்சி காணொளி</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Card 8: LIC Payment Collection -->
+            <div class="service-card">
+                <div>
+                    <div class="card-header">
+                        <div class="card-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                        <div>
+                            <div class="card-title lang-en">LIC Premium Collection</div>
+                            <div class="card-title lang-ta">எல்.ஐ.சி (LIC) பிரீமியம் செலுத்துதல்</div>
+                            
+                            <div class="card-subtitle lang-en">Life Insurance Corporation Premium Payment</div>
+                            <div class="card-subtitle lang-ta">இந்திய ஆயுள் காப்பீட்டுக் கழக தவணைத் தொகை செலுத்துதல்</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-links">
+                    <a href="https://drive.google.com/file/d/1hhwPr8fiQCVeeU3WD6rQyABPOCv7NOTZ/view?usp=sharing" target="_blank" class="btn btn-video">
+                        <i class="fa-solid fa-circle-play"></i> 
+                        <span class="lang-en">Training Video</span>
+                        <span class="lang-ta">பயிற்சி காணொளி</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Card 9: EMI Collection -->
+            <div class="service-card">
+                <div>
+                    <div class="card-header">
+                        <div class="card-icon"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+                        <div>
+                            <div class="card-title lang-en">EMI Collection</div>
+                            <div class="card-title lang-ta">கடன் தவணைத் தொகை செலுத்துதல் (EMI)</div>
+                            
+                            <div class="card-subtitle lang-en">Mahindra, TVS Credit, HDFC BC Only</div>
+                            <div class="card-subtitle lang-ta">மஹிந்திரா, டிவிஎஸ் கிரெடிட், ஹெச்டிஎஃப்சி பிசி சேகரிப்பு</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-links">
+                    <a href="https://cscloanbazar.in/web-new/#/" target="_blank" class="btn btn-portal">
+                        <i class="fa-solid fa-globe"></i> 
+                        <span class="lang-en">Access Portal</span>
+                        <span class="lang-ta">இணையதளம் செல்ல</span>
+                    </a>
+                    <a href="https://drive.google.com/file/d/1DWnwu9yuyr_vz-6fxhDC4SAaD9Jl64Gc/view?usp=sharing" target="_blank" class="btn btn-video">
+                        <i class="fa-solid fa-circle-play"></i> 
+                        <span class="lang-en">Training Video</span>
+                        <span class="lang-ta">பயிற்சி காணொளி</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Card 10: Loan Bazar Leads Portal -->
+            <div class="service-card">
+                <div>
+                    <div class="card-header">
+                        <div class="card-icon"><i class="fa-solid fa-landmark"></i></div>
+                        <div>
+                            <div class="card-title lang-en">Loan Bazar Leads Portal</div>
+                            <div class="card-title lang-ta">கடன் பஜார் விண்ணப்பப் பதிவு</div>
+                            
+                            <div class="card-subtitle lang-en">Financial Services & Loan Applications</div>
+                            <div class="card-subtitle lang-ta">நிதிச் சேவைகள் மற்றும் கடன் விண்ணப்பப் பதிவு போர்டல்</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-links">
+                    <a href="https://cscloanbazar.in/#/" target="_blank" class="btn btn-portal">
+                        <i class="fa-solid fa-globe"></i> 
+                        <span class="lang-en">Access Portal</span>
+                        <span class="lang-ta">இணையதளம் செல்ல</span>
+                    </a>
+                    <a href="https://drive.google.com/drive/folders/11Bnpr-itPO83mDbTNmd5FJlmZaDZTuXW?usp=drive_link" target="_blank" class="btn btn-video">
+                        <i class="fa-solid fa-folder-open"></i> 
+                        <span class="lang-en">Training Videos Folder</span>
+                        <span class="lang-ta">பயிற்சி காணொளிகள் கோப்பு</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Card 11: DigiPay Web & App -->
+            <div class="service-card">
+                <div>
+                    <div class="card-header">
+                        <div class="card-icon"><i class="fa-solid fa-wallet"></i></div>
+                        <div>
+                            <div class="card-title lang-en">DigiPay Web & App</div>
+                            <div class="card-title lang-ta">டிஜிபே இணையதளம் மற்றும் செயலி</div>
+                            
+                            <div class="card-subtitle lang-en">Cash Withdrawal & Wallet Top-up</div>
+                            <div class="card-subtitle lang-ta">ரோக்கம் திரும்பப் பெறுதல் மற்றும் டிஜிட்டல் பணப்பை புதுப்பித்தல்</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-links">
+                    <a href="https://digipayweb.csccloud.in/" target="_blank" class="btn btn-portal">
+                        <i class="fa-solid fa-globe"></i> 
+                        <span class="lang-en">DigiPay Web Portal</span>
+                        <span class="lang-ta">டிஜிபே இணையதளம் செல்ல</span>
+                    </a>
+                    <a href="https://drive.google.com/file/d/1Z1eeX1eACuK0pSiiPZ3tlfJg6_FK1KY9/view?usp=sharing" target="_blank" class="btn btn-video">
+                        <i class="fa-solid fa-circle-play"></i> 
+                        <span class="lang-en">Web Portal Training Video</span>
+                        <span class="lang-ta">இணையதள பயிற்சி காணொளி</span>
+                    </a>
+                    <a href="https://play.google.com/store/apps/details?id=com.digipay.csc.digipay_new_23" target="_blank" class="btn btn-app">
+                        <i class="fa-brands fa-google-play"></i> 
+                        <span class="lang-en">Android App</span>
+                        <span class="lang-ta">ஆண்ட்ராய்டு செயலி பதிவிறக்கம்</span>
+                    </a>
+                    <a href="https://drive.google.com/file/d/1XqXytSKhIQ1cYIaMlXCLAtvgyIG5Pm5n/view?usp=sharing" target="_blank" class="btn btn-video">
+                        <i class="fa-solid fa-circle-play"></i> 
+                        <span class="lang-en">Mobile App Training Video</span>
+                        <span class="lang-ta">செயலி பயிற்சி காணொளி</span>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-info">
+                <h3>Vanamadevi CSC Center</h3>
+                <p><strong>Recognized by:</strong> CSC eGovernance Services India Ltd</p>
+                <p><strong>CSC ID:</strong> 255224320013</p>
+               
+            </div>
+            <div class="footer-contact">
+                <h3 class="lang-en">Contact Details</h3>
+                <h3 class="lang-ta">தொடர்பு முகவரி</h3>
+                <p><i class="fa-solid fa-location-dot"></i> Vanamadevi, Cuddalore, Tamil Nadu - 607105</p>
+                <p><i class="fa-solid fa-phone"></i> 04142 290680</p>
+                <p><i class="fa-solid fa-envelope"></i> admin@vcsc.co.in</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p class="lang-en">Site Developed By Ajith, CSC/VLE | CSC ID : 255224320013 | Vanamadevi CSC Center | Recognized by CSC eGovernance Services India Ltd</p>
+            <p class="lang-ta">இணையதளம் உருவாக்கியவர்: அஜித், சிஎஸ்சி/விஎல்இ | சிஎஸ்சி ஐடி : 255224320013 | வனமாதேவி பொது சேவை மையம் | அங்கீகரிக்கப்பட்டது: சிஎஸ்சி இ-கவர்னன்ஸ் சர்வீசஸ் இந்தியா லிமிடெட்</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Strict Language Switching -->
+    <script>
+        function toggleLanguage() {
+            document.body.classList.toggle('lang-tamil');
+        }
+    </script>
+</body>
+</html>
