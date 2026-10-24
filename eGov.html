@@ -4,75 +4,352 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Appointment Booking - Vanamadevi CSC Center</title>
+  
+  <!-- Direct PDF Generation Libraries (No Print Dialog Required) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
   <style>
+    :root {
+      --primary-blue: #0f4c81;
+      --secondary-blue: #1e6091;
+      --accent-teal: #00a896;
+      --card-bg: rgba(255, 255, 255, 0.96);
+    }
+
     * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    body { background-color: #f4f7f6; margin: 0; padding: 20px; }
-    .container { max-width: 580px; margin: 20px auto; background: #ffffff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-    
-    /* Header & Layout */
-    .header-logos { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-    .header-title { text-align: center; flex: 1; padding: 0 10px; }
-    .header-title h2 { color: #0056b3; margin: 0; font-size: 20px; }
-    .header-title p { color: #555; margin: 5px 0 0 0; font-size: 13px; font-weight: bold; }
-    .divider { height: 2px; background-color: #0056b3; margin-bottom: 20px; }
 
-    /* Form Styling */
-    .form-group { margin-bottom: 18px; }
-    label { display: block; margin-bottom: 6px; color: #333; font-weight: 600; font-size: 14px; }
-    input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
-    input:focus, select:focus { border-color: #0056b3; outline: none; }
-    .note { font-size: 12px; color: #d9534f; margin-top: 4px; display: block; }
-    .btn-submit { width: 100%; padding: 12px; background-color: #0056b3; color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; transition: background 0.3s; }
-    .btn-submit:hover { background-color: #003d80; }
+    body {
+      margin: 0;
+      padding: 20px 10px;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #020024 0%, #090979 35%, #00d4ff 100%);
+      position: relative;
+      overflow-x: hidden;
+      color: #333;
+    }
 
-    /* Footer Styling */
-    .footer { margin-top: 30px; border-top: 1px solid #e0e0e0; padding-top: 15px; text-align: center; font-size: 12px; color: #555; line-height: 1.6; }
-    .footer strong { color: #222; }
+    /* Animated Ocean Waves Background */
+    .ocean { 
+      height: 160px;
+      width: 100%;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      background: transparent;
+      z-index: 0;
+      pointer-events: none;
+    }
 
-    /* Modal / Popup Base Styling */
-    .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 1000; }
-    .receipt-card { background: #fff; width: 90%; max-width: 480px; padding: 25px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); position: relative; }
-    .receipt-header { text-align: center; border-bottom: 2px dashed #0056b3; padding-bottom: 12px; margin-bottom: 15px; }
-    .receipt-header h3 { margin: 0; color: #0056b3; font-size: 18px; }
-    .receipt-header p { margin: 3px 0 0 0; font-size: 12px; color: #666; }
-    .receipt-table { width: 100%; margin-bottom: 20px; border-collapse: collapse; }
-    .receipt-table td { padding: 8px 4px; font-size: 14px; border-bottom: 1px solid #eee; }
-    .receipt-table td.label { font-weight: bold; color: #444; width: 40%; }
-    .receipt-table td.value { color: #111; }
-    .receipt-actions { display: flex; gap: 10px; margin-top: 15px; }
-    .btn-print { flex: 1; background: #28a745; color: white; border: none; padding: 10px; border-radius: 5px; font-weight: bold; cursor: pointer; }
-    .btn-print:hover { background: #218838; }
-    .btn-close { flex: 1; background: #6c757d; color: white; border: none; padding: 10px; border-radius: 5px; font-weight: bold; cursor: pointer; }
-    .btn-close:hover { background: #5a6268; }
+    .wave {
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 88.7" preserveAspectRatio="none"><path fill="rgba(255,255,255,0.25)" d="M800,56.9c-155.5,0-204.9-50-400-50S0,56.9,0,56.9V88.7h800V56.9z"/></svg>');
+      position: absolute;
+      width: 200%;
+      height: 100%;
+      animation: wave 12s linear infinite;
+      transform: translate3d(0, 0, 0);
+    }
 
-    /* Centered Alert Modal Styling */
-    .alert-card { background: #fff; width: 90%; max-width: 440px; padding: 25px; border-radius: 10px; box-shadow: 0 8px 20px rgba(0,0,0,0.25); text-align: center; }
-    .alert-icon { font-size: 38px; color: #d9534f; margin-bottom: 10px; }
-    .alert-title { font-size: 18px; font-weight: bold; color: #d9534f; margin-bottom: 12px; }
-    .alert-msg-en { font-size: 14px; color: #333; margin-bottom: 10px; line-height: 1.4; }
-    .alert-msg-ta { font-size: 14px; color: #0056b3; margin-bottom: 20px; line-height: 1.4; font-weight: 500; }
-    .btn-alert-ok { width: 100%; background: #d9534f; color: white; border: none; padding: 11px; border-radius: 6px; font-size: 15px; font-weight: bold; cursor: pointer; }
-    .btn-alert-ok:hover { background: #c9302c; }
+    .wave:nth-of-type(2) {
+      bottom: 0;
+      animation: wave 8s linear infinite reverse;
+      opacity: 0.5;
+    }
 
-    /* Print Styles */
-    @media print {
-      body * { visibility: hidden; }
-      #receiptModal, #receiptModal * { visibility: visible; }
-      #receiptModal { position: absolute; left: 0; top: 0; width: 100%; height: 100%; background: white; }
-      .receipt-card { box-shadow: none; border: 1px solid #000; width: 100%; max-width: 100%; }
-      .receipt-actions { display: none; }
+    @keyframes wave {
+      0% { transform: translateX(0); }
+      50% { transform: translateX(-25%); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 10px auto;
+      background: var(--card-bg);
+      padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      position: relative;
+      z-index: 10;
+      backdrop-filter: blur(8px);
+    }
+
+    /* Header & Banner */
+    .header-banner {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    .main-logo {
+      max-width: 180px;
+      height: auto;
+      margin-bottom: 8px;
+      border-radius: 6px;
+    }
+
+    .header-title h2 {
+      color: var(--primary-blue);
+      margin: 4px 0;
+      font-size: 19px;
+    }
+
+    .header-title p {
+      color: #555;
+      margin: 2px 0 0 0;
+      font-size: 12.5px;
+      font-weight: bold;
+    }
+
+    .divider {
+      height: 3px;
+      background: linear-gradient(90deg, #0f4c81, #00a896);
+      margin: 15px 0;
+      border-radius: 2px;
+    }
+
+    /* Form Inputs */
+    .form-group { margin-bottom: 16px; }
+    label { display: block; margin-bottom: 5px; color: #333; font-weight: 600; font-size: 13.5px; }
+    input[type="text"], input[type="tel"], input[type="email"], select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ccc;
+      border-radius: 7px;
+      font-size: 13.5px;
+      transition: all 0.3s ease;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--primary-blue);
+      box-shadow: 0 0 8px rgba(15, 76, 129, 0.25);
+      outline: none;
+    }
+
+    .note { font-size: 11.5px; color: #d9534f; margin-top: 5px; display: block; }
+
+    /* Calendar Widget */
+    .calendar-card {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 12px;
+      margin-top: 5px;
+    }
+
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .calendar-header button {
+      background: var(--primary-blue);
+      color: white;
+      border: none;
+      padding: 5px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 12px;
+    }
+
+    .calendar-header span { font-weight: bold; color: #1e293b; font-size: 14px; }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+      text-align: center;
+    }
+
+    .cal-day-name { font-size: 11px; font-weight: bold; color: #64748b; padding-bottom: 3px; }
+
+    .cal-cell {
+      padding: 8px 3px;
+      font-size: 12px;
+      border-radius: 5px;
+      background: #e2e8f0;
+      color: #94a3b8;
+      cursor: not-allowed;
+    }
+
+    .cal-cell.weekend {
+      background: #dcfce7;
+      border: 1px solid #86efac;
+      color: #166534;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .cal-cell.weekend:hover { background: #bbf7d0; }
+    .cal-cell.selected { background: var(--primary-blue) !important; color: white !important; }
+    .cal-cell.other-month { opacity: 0.25; }
+
+    /* Time Slot Grid */
+    .time-grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .time-card {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 10px 6px;
+      text-align: center;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      color: #334155;
+    }
+
+    .time-card.selected-time {
+      background: var(--primary-blue) !important;
+      color: white !important;
+      border-color: var(--primary-blue) !important;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, #0f4c81, #00a896);
+      color: white;
+      border: none;
+      border-radius: 7px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 12px;
+    }
+
+    .footer {
+      margin-top: 25px;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 12px;
+      text-align: center;
+      font-size: 11.5px;
+      color: #64748b;
+      line-height: 1.5;
+    }
+
+    /* Modal Styling */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.75);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      padding: 10px;
+    }
+
+    .receipt-card {
+      background: #fff;
+      width: 100%;
+      max-width: 380px;
+      padding: 18px;
+      border-radius: 12px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+      box-sizing: border-box;
+    }
+
+    /* Target Printable Area */
+    .pdf-printable-area {
+      padding: 15px;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+    }
+
+    .receipt-header {
+      text-align: center;
+      border-bottom: 2px dashed #0f4c81;
+      padding-bottom: 10px;
+      margin-bottom: 12px;
+    }
+
+    .receipt-header h3 { margin: 0; color: #0f4c81; font-size: 16px; }
+    .receipt-header p { margin: 2px 0 0 0; font-size: 11px; color: #666; }
+
+    .receipt-table { width: 100%; margin-bottom: 10px; border-collapse: collapse; }
+    .receipt-table td { padding: 6px 2px; font-size: 12px; border-bottom: 1px solid #f1f5f9; }
+    .receipt-table td.label { font-weight: bold; color: #475569; width: 44%; }
+    .receipt-table td.value { color: #0f172a; font-weight: 600; text-align: right; }
+
+    .receipt-actions { display: flex; gap: 8px; margin-top: 12px; }
+
+    .btn-download {
+      flex: 1;
+      background: #059669;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 12.5px;
+      cursor: pointer;
+    }
+
+    .btn-close {
+      flex: 1;
+      background: #64748b;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 12.5px;
+      cursor: pointer;
+    }
+
+    /* Alert Modal */
+    .alert-card {
+      background: #fff;
+      width: 100%;
+      max-width: 350px;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .alert-icon { font-size: 32px; color: #dc2626; margin-bottom: 8px; }
+    .alert-title { font-size: 16px; font-weight: bold; color: #dc2626; margin-bottom: 8px; }
+    .alert-msg-en { font-size: 13px; color: #334155; margin-bottom: 6px; }
+    .alert-msg-ta { font-size: 13px; color: #0f4c81; margin-bottom: 15px; font-weight: 500; }
+
+    .btn-alert-ok {
+      width: 100%;
+      background: #dc2626;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
 
+<div class="ocean">
+  <div class="wave"></div>
+  <div class="wave"></div>
+</div>
+
 <div class="container">
-  <div class="header-logos">
+  <div class="header-banner">
+    <img src="https://raw.githubusercontent.com/vcscegov/Appointment/refs/heads/main/cscmylogo.jpg" alt="CSC Logo" class="main-logo">
     <div class="header-title">
       <h2>Vanamadevi CSC Center / வானமாதேவி பொது சேவை மையம்</h2>
       <p>Service Appointment Booking / சேவை முன்பதிவு</p>
     </div>
   </div>
+
   <div class="divider"></div>
 
   <form id="appointmentForm">
@@ -88,7 +365,7 @@
 
     <div class="form-group">
       <label for="email">Email Address / மின்னஞ்சல் முகவரி</label>
-      <input type="email" id="email" name="email" placeholder="Enter email to receive appointment slip" required>
+      <input type="email" id="email" name="email" placeholder="Enter email address" required>
     </div>
 
     <div class="form-group">
@@ -114,29 +391,39 @@
         <option value="Job Application">Job Application</option>
         <option value="PMSYM">PMSYM</option>
         <option value="NPS">NPS</option>
-        <option value="Ration Card Update">Other Services</option>
+        <option value="Other Services">Other Services</option>
       </select>
     </div>
 
+    <!-- Calendar Picker Widget -->
     <div class="form-group">
-      <label for="date">Visiting Date (Saturday & Sunday Only) /பார்வை தேதி (சனி மற்றும் ஞாயிறு மட்டும்)</label>
-      <input type="date" id="date" name="date" required>
-      <span class="note">* Appointments are only available on Saturdays and Sundays. / சனி மற்றும் ஞாயிற்றுக்கிழமைகளில் மட்டுமே முன்பதிவு செய்ய முடியும்.</span>
+      <label>Visiting Date (Saturday & Sunday Only) / பார்வை தேதி</label>
+      <input type="hidden" id="date" name="date" required>
+      <div class="calendar-card">
+        <div class="calendar-header">
+          <button type="button" onclick="changeMonth(-1)">❮ Prev</button>
+          <span id="calMonthYear"></span>
+          <button type="button" onclick="changeMonth(1)">Next ❯</button>
+        </div>
+        <div class="calendar-grid" id="calGrid"></div>
+      </div>
+      <span class="note">* Select an active green weekend date.</span>
     </div>
 
+    <!-- Time Slot Options -->
     <div class="form-group">
-      <label for="time">Visiting time / வருகை நேரம் (9:30 AM - 6:30 PM)</label>
-      <select id="time" name="time" required>
-        <option value="">-- Select Visiting Time / நேரத்தைத் தேர்ந்தெடுக்கவும் --</option>
-        <option value="09:30 AM - 10:30 AM">09:30 AM - 10:30 AM</option>
-        <option value="10:30 AM - 11:30 AM">10:30 AM - 11:30 AM</option>
-        <option value="11:30 AM - 12:30 PM">11:30 AM - 12:30 PM</option>
-        <option value="12:30 PM - 01:30 PM">12:30 PM - 01:30 PM</option>
-        <option value="02:30 PM - 03:30 PM">02:30 PM - 03:30 PM</option>
-        <option value="03:30 PM - 04:30 PM">03:30 PM - 04:30 PM</option>
-        <option value="04:30 PM - 05:30 PM">04:30 PM - 05:30 PM</option>
-        <option value="05:30 PM - 06:30 PM">05:30 PM - 06:30 PM</option>
-      </select>
+      <label>Visiting Time Slot / வருகை நேரம் (9:30 AM - 6:30 PM)</label>
+      <input type="hidden" id="time" name="time" required>
+      <div class="time-grid-container" id="timeGrid">
+        <div class="time-card" onclick="selectTimeSlot('09:30 AM - 10:30 AM', this)">09:30 AM - 10:30 AM</div>
+        <div class="time-card" onclick="selectTimeSlot('10:30 AM - 11:30 AM', this)">10:30 AM - 11:30 AM</div>
+        <div class="time-card" onclick="selectTimeSlot('11:30 AM - 12:30 PM', this)">11:30 AM - 12:30 PM</div>
+        <div class="time-card" onclick="selectTimeSlot('12:30 PM - 01:30 PM', this)">12:30 PM - 01:30 PM</div>
+        <div class="time-card" onclick="selectTimeSlot('02:30 PM - 03:30 PM', this)">02:30 PM - 03:30 PM</div>
+        <div class="time-card" onclick="selectTimeSlot('03:30 PM - 04:30 PM', this)">03:30 PM - 04:30 PM</div>
+        <div class="time-card" onclick="selectTimeSlot('04:30 PM - 05:30 PM', this)">04:30 PM - 05:30 PM</div>
+        <div class="time-card" onclick="selectTimeSlot('05:30 PM - 06:30 PM', this)">05:30 PM - 06:30 PM</div>
+      </div>
     </div>
 
     <button type="submit" id="submitBtn" class="btn-submit">Book Appointment / முன்பதிவு செய்</button>
@@ -144,7 +431,7 @@
 
   <div class="footer">
     Developed by <strong>Ajith</strong>, CSC VLE/RAP<br>
-    CSC eGovernance Services India Ltd.<br>
+    CSC eGovernance Services India Ltd., <strong>வானமாதேவி</strong><br>
     Contact : 08778750680 | e-Mail : csc607105@gmail.com
   </div>
 </div>
@@ -152,54 +439,59 @@
 <!-- Receipt Modal Popup -->
 <div id="receiptModal" class="modal-overlay">
   <div class="receipt-card">
-    <div class="receipt-header">
-      <h3>Vanamadevi CSC Center</h3>
-      <p>Appointment Booking Slip (Emailed Successfully)</p>
-    </div>
     
-    <table class="receipt-table">
-      <tr>
-        <td class="label">Customer Name:</td>
-        <td class="value" id="recName"></td>
-      </tr>
-      <tr>
-        <td class="label">Mobile Number:</td>
-        <td class="value" id="recPhone"></td>
-      </tr>
-      <tr>
-        <td class="label">Email Address:</td>
-        <td class="value" id="recEmail"></td>
-      </tr>
-      <tr>
-        <td class="label">Service Required:</td>
-        <td class="value" id="recService"></td>
-      </tr>
-      <tr>
-        <td class="label">Appointment Date:</td>
-        <td class="value" id="recDate"></td>
-      </tr>
-      <tr>
-        <td class="label">Visiting Time:</td>
-        <td class="value" id="recTime"></td>
-      </tr>
-      <tr>
-        <td class="label">Booking Ref:</td>
-        <td class="value" id="recRef"></td>
-      </tr>
-    </table>
+    <!-- Printable Slip Target -->
+    <div id="pdfReceiptArea" class="pdf-printable-area">
+      <div class="receipt-header">
+        <img id="receiptLogo" src="https://raw.githubusercontent.com/vcscegov/Appointment/refs/heads/main/cscmylogo.jpg" alt="CSC Logo" style="max-width:140px; height:auto; display:block; margin:0 auto 6px auto;">
+        <h3>Vanamadevi CSC Center</h3>
+        <p>Appointment Booking Slip</p>
+      </div>
+      
+      <table class="receipt-table">
+        <tr>
+          <td class="label">Name:</td>
+          <td class="value" id="recName"></td>
+        </tr>
+        <tr>
+          <td class="label">Mobile:</td>
+          <td class="value" id="recPhone"></td>
+        </tr>
+        <tr>
+          <td class="label">Email:</td>
+          <td class="value" id="recEmail"></td>
+        </tr>
+        <tr>
+          <td class="label">Service:</td>
+          <td class="value" id="recService"></td>
+        </tr>
+        <tr>
+          <td class="label">Date:</td>
+          <td class="value" id="recDate"></td>
+        </tr>
+        <tr>
+          <td class="label">Time:</td>
+          <td class="value" id="recTime"></td>
+        </tr>
+        <tr>
+          <td class="label">Booking Ref:</td>
+          <td class="value" id="recRef"></td>
+        </tr>
+      </table>
+    </div>
 
     <div class="receipt-actions">
-      <button class="btn-print" onclick="window.print()">Print Receipt / Save PDF</button>
-      <button class="btn-close" onclick="closeModal('receiptModal')">Close</button>
+      <button class="btn-download" id="dlBtn" onclick="downloadPDFDirectly()">Download PDF / PDF பதிவிறக்கம்</button>
+      <button class="btn-close" onclick="closeModal('receiptModal')">Close / மூடு</button>
     </div>
   </div>
 </div>
 
-<!-- Centered Warning / Error Alert Modal -->
+<!-- Alert Modal -->
 <div id="alertModal" class="modal-overlay">
   <div class="alert-card">
     <div class="alert-icon">⚠️</div>
-    <div class="alert-title">Slot Already Booked! / ஏற்கனவே முன்பதிவு செய்யப்பட்டுள்ளது!</div>
+    <div class="alert-title">Notice / எச்சரிக்கை</div>
     <div class="alert-msg-en" id="alertMsgEn"></div>
     <div class="alert-msg-ta" id="alertMsgTa"></div>
     <button class="btn-alert-ok" onclick="closeModal('alertModal')">OK / சரி</button>
@@ -208,28 +500,91 @@
 
 <script>
   const scriptURL = 'https://script.google.com/macros/s/AKfycbysDYCv8JTQsNnbyless8WHnG6ERb_wZyfdrlH6jaKeP91lTyAc8g7xyHrcpIMo3buA/exec';
-  
   const form = document.getElementById('appointmentForm');
   const submitBtn = document.getElementById('submitBtn');
-  const dateInput = document.getElementById('date');
 
-  dateInput.min = new Date().toISOString().split('T')[0];
+  let currentDate = new Date();
+  let selectedDateStr = '';
 
-  dateInput.addEventListener('change', function() {
-    const selectedDate = new Date(this.value);
-    const day = selectedDate.getUTCDay();
+  function renderCalendar() {
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
     
-    if (day !== 0 && day !== 6) {
-      showAlertModal(
-        'Appointments are only available on Saturdays and Sundays. Please select a weekend date.',
-        'சனி மற்றும் ஞாயிற்றுக்கிழமைகளில் மட்டுமே முன்பதிவு செய்ய முடியும். தயவுசெய்து வார இறுதி நாளைத் தேர்ந்தெடுக்கவும்.'
-      );
-      this.value = '';
+    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    document.getElementById('calMonthYear').innerText = `${monthNames[month]} ${year}`;
+
+    const grid = document.getElementById('calGrid');
+    grid.innerHTML = '';
+
+    const days = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+    days.forEach(d => {
+      const div = document.createElement('div');
+      div.className = 'cal-day-name';
+      div.innerText = d;
+      grid.appendChild(div);
+    });
+
+    const firstDayIndex = new Date(year, month, 1).getDay();
+    const totalDays = new Date(year, month + 1, 0).getDate();
+    const today = new Date();
+    today.setHours(0,0,0,0);
+
+    for (let i = 0; i < firstDayIndex; i++) {
+      const div = document.createElement('div');
+      div.className = 'cal-cell other-month';
+      grid.appendChild(div);
     }
-  });
+
+    for (let day = 1; day <= totalDays; day++) {
+      const cellDate = new Date(year, month, day);
+      const div = document.createElement('div');
+      div.className = 'cal-cell';
+      div.innerText = day;
+
+      const dayOfWeek = cellDate.getDay();
+      const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6);
+
+      if (cellDate >= today && isWeekend) {
+        div.classList.add('weekend');
+        const formattedDate = cellDate.toISOString().split('T')[0];
+        if (formattedDate === selectedDateStr) {
+          div.classList.add('selected');
+        }
+        div.onclick = () => {
+          selectedDateStr = formattedDate;
+          document.getElementById('date').value = selectedDateStr;
+          renderCalendar();
+        };
+      }
+      grid.appendChild(div);
+    }
+  }
+
+  function changeMonth(direction) {
+    currentDate.setMonth(currentDate.getMonth() + direction);
+    renderCalendar();
+  }
+
+  function selectTimeSlot(timeStr, element) {
+    document.getElementById('time').value = timeStr;
+    document.querySelectorAll('.time-card').forEach(card => card.classList.remove('selected-time'));
+    element.classList.add('selected-time');
+  }
+
+  renderCalendar();
 
   form.addEventListener('submit', e => {
     e.preventDefault();
+    
+    if (!document.getElementById('date').value) {
+      showAlertModal('Please select a weekend date from the calendar.', 'காலண்டரிலிருந்து வார இறுதி நாளைத் தேர்ந்தெடுக்கவும்.');
+      return;
+    }
+    if (!document.getElementById('time').value) {
+      showAlertModal('Please select a time slot.', 'வருகை நேரத்தைத் தேர்ந்தெடுக்கவும்.');
+      return;
+    }
+
     submitBtn.disabled = true;
     submitBtn.innerText = 'Submitting & Emailing Slip...';
 
@@ -259,6 +614,9 @@
 
         document.getElementById('receiptModal').style.display = 'flex';
         form.reset();
+        selectedDateStr = '';
+        document.querySelectorAll('.time-card').forEach(card => card.classList.remove('selected-time'));
+        renderCalendar();
       } else {
         showAlertModal(
           data.message_en || 'Selected time slot is already booked.',
@@ -277,6 +635,50 @@
       submitBtn.innerText = 'Book Appointment / முன்பதிவு செய்';
     });
   });
+
+  /* Direct PDF Generation Strategy (Canvas to jsPDF) */
+  async function downloadPDFDirectly() {
+    const dlBtn = document.getElementById('dlBtn');
+    dlBtn.innerText = 'Downloading PDF...';
+    dlBtn.disabled = true;
+
+    try {
+      const element = document.getElementById('pdfReceiptArea');
+      const refNo = document.getElementById('recRef').innerText || 'CSC_Slip';
+
+      // Render the DOM node directly into an offscreen canvas
+      const canvas = await html2canvas(element, {
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: '#ffffff'
+      });
+
+      const imgData = canvas.toDataURL('image/jpeg', 1.0);
+      
+      // Initialize jsPDF directly
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF({
+        orientation: 'p',
+        unit: 'mm',
+        format: 'a5'
+      });
+
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+      pdf.addImage(imgData, 'JPEG', 0, 10, pdfWidth, pdfHeight);
+      
+      // Trigger instant PDF file download
+      pdf.save(`Vanamadevi_CSC_Receipt_${refNo}.pdf`);
+    } catch (err) {
+      console.error('PDF Generation error:', err);
+      showAlertModal('Could not download PDF. Please try again.', 'PDF பதிவிறக்கம் செய்ய முடியவில்லை. மீண்டும் முயற்சிக்கவும்.');
+    } finally {
+      dlBtn.innerText = 'Download PDF / PDF பதிவிறக்கம்';
+      dlBtn.disabled = false;
+    }
+  }
 
   function showAlertModal(msgEn, msgTa) {
     document.getElementById('alertMsgEn').innerText = msgEn;
