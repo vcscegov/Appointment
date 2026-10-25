@@ -432,7 +432,7 @@
   <div class="footer">
     Developed by <strong>Ajith</strong>, CSC VLE/RAP<br>
     CSC eGovernance Services India Ltd., <strong>வானமாதேவி</strong><br>
-    Contact : 08778750680 | e-Mail : csc607105@gmail.com
+    Contact : 04142 290680 | e-Mail : admin@vcsc.co.in
   </div>
 </div>
 
@@ -506,6 +506,14 @@
   let currentDate = new Date();
   let selectedDateStr = '';
 
+  // Helper function to format date as YYYY-MM-DD locally without UTC shift issues
+  function getLocalDateString(dateObj) {
+    const y = dateObj.getFullYear();
+    const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+    const d = String(dateObj.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  }
+
   function renderCalendar() {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
@@ -546,7 +554,7 @@
 
       if (cellDate >= today && isWeekend) {
         div.classList.add('weekend');
-        const formattedDate = cellDate.toISOString().split('T')[0];
+        const formattedDate = getLocalDateString(cellDate);
         if (formattedDate === selectedDateStr) {
           div.classList.add('selected');
         }
