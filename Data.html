@@ -134,7 +134,6 @@
     <div id="toast" class="toast">Action completed successfully</div>
 
     <script>
-        // REPLACE THIS URL WITH YOUR DEPLOYED GOOGLE APPS SCRIPT WEB APP URL
         const API_URL = "https://script.google.com/macros/s/AKfycbyrXn5byn9rFlbfcbukT1X7OP_Cbd1BE33YPafHbjOLi1i9uPzolDV475NvlJvq--hGbg/exec";
 
         let sheetHeaders = [];
@@ -170,15 +169,25 @@
                 const rowIndex = item.rowIndex;
 
                 let cellsHtml = row.map((cell, colIndex) => {
-                    // Make cells editable dynamically (except Timestamp or Booking Ref if preferred)
+                    let displayCell = cell !== null && cell !== undefined ? cell : '';
+
+                    // Check if cell contains ISO timestamp and reformat cleanly to avoid timezone shift
+                    if (typeof displayCell === 'string' && displayCell.includes('T') && displayCell.includes('Z')) {
+                        const d = new Date(displayCell);
+                        if (!isNaN(d.getTime())) {
+                            const year = d.getFullYear();
+                            const month = String(d.getMonth() + 1).padStart(2, '0');
+                            const day = String(d.getDate()).padStart(2, '0');
+                            displayCell = `${year}-${month}-${day}`;
+                        }
+                    }
+
                     return `<td contenteditable="true" 
                                 onblur="updateCell(${rowIndex}, ${colIndex}, this.innerText)">
-                                ${cell !== null && cell !== undefined ? cell : ''}
+                                ${displayCell}
                             </td>`;
                 }).join('');
 
-                // Map row columns based on standard index positions
-                // 0: Timestamp, 1: Name, 2: Mobile, 3: Email, 4: Service, 5: Date, 6: Time, 7: Ref
                 const name = row[1] || '';
                 const email = row[3] || '';
                 const service = row[4] || '';
@@ -234,7 +243,7 @@
             }
 
             const reason = prompt(`Enter cancellation reason for ${name}:`, "Slot busy / Unforeseen work");
-            if (reason === null) return; // User cancelled prompt
+            if (reason === null) return;
 
             showToast("Sending cancellation email...");
             try {
@@ -299,10 +308,7 @@
             }, 3000);
         }
 
-        // Fetch data initially on page load
         fetchSheetData();
-
-        // Auto-refresh data every 30 seconds
         setInterval(fetchSheetData, 30000);
     </script>
 
