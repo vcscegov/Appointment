@@ -3,88 +3,307 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vanamadevi CSC Appointments - Dynamic UI</title>
+    <title>Vanamadevi CSC Appointments - Interactive Dashboard</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 20px;
-            background-color: #f9f9f9;
+            background-color: #f4f7f6;
+            color: #333;
+        }
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
         }
         h2 {
-            color: #333;
+            color: #1a365d;
+            margin: 0;
+        }
+        .refresh-btn {
+            background-color: #3182ce;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .refresh-btn:hover {
+            background-color: #2b6cb0;
+        }
+        .table-wrapper {
+            overflow-x: auto;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            background-color: #ffffff;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            font-size: 14px;
         }
         th, td {
-            padding: 12px 15px;
+            padding: 12px 14px;
             text-align: left;
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid #e2e8f0;
         }
         th {
-            background-color: #007bff;
+            background-color: #2b6cb0;
             color: white;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
         }
         tr:hover {
-            background-color: #f1f1f1;
+            background-color: #f7fafc;
+        }
+        td[contenteditable="true"] {
+            background-color: #fffdfa;
+            outline: 1px dashed #cbd5e0;
+            border-radius: 3px;
+        }
+        td[contenteditable="true"]:focus {
+            background-color: #ffffff;
+            outline: 2px solid #3182ce;
+        }
+        .action-btn {
+            border: none;
+            padding: 6px 10px;
+            margin-right: 4px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .btn-cancel {
+            background-color: #e53e3e;
+            color: white;
+        }
+        .btn-cancel:hover {
+            background-color: #c53030;
+        }
+        .btn-reminder {
+            background-color: #dd6b20;
+            color: white;
+        }
+        .btn-reminder:hover {
+            background-color: #c05621;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #2b6cb0;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            display: none;
+            z-index: 1000;
         }
     </style>
 </head>
 <body>
 
-    <h2>Vanamadevi CSC Appointments</h2>
-    <table id="appointmentsTable">
-        <thead>
-            <tr id="tableHeader">
-                <th>Loading data...</th>
-            </tr>
-        </thead>
-        <tbody id="tableBody">
-        </tbody>
-    </table>
+    <div class="header-container">
+        <h2>Vanamadevi CSC Appointments</h2>
+        <button class="refresh-btn" onclick="fetchSheetData()">Refresh Data</button>
+    </div>
+
+    <div class="table-wrapper">
+        <table id="appointmentsTable">
+            <thead>
+                <tr id="tableHeader">
+                    <th>Loading data...</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+            </tbody>
+        </table>
+    </div>
+
+    <div id="toast" class="toast">Action completed successfully</div>
 
     <script>
-        // Replace with your Google Sheet ID
-        const SHEET_ID = '1m4Pq6I6kOy3qszzP-ON7xoX2KNGh7TYlEqg1EC7dIUM';
-        const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
+        // REPLACE THIS URL WITH YOUR DEPLOYED GOOGLE APPS SCRIPT WEB APP URL
+        const API_URL = "YOUR_APPS_SCRIPT_WEB_APP_URL_HERE";
+
+        let sheetHeaders = [];
+        let appointmentData = [];
 
         async function fetchSheetData() {
             try {
-                const response = await fetch(CSV_URL);
-                const csvText = await response.text();
-                
-                // Parse CSV rows
-                const rows = csvText.split('\n').map(row => 
-                    row.split(',').map(cell => cell.replace(/^"(.*)"$/, '$1').trim())
-                );
+                showToast("Loading latest data...");
+                const response = await fetch(`${API_URL}?action=getData`);
+                const result = await response.json();
 
-                if (rows.length === 0) return;
+                sheetHeaders = result.headers;
+                appointmentData = result.data;
 
-                // Render Header
-                const headerRow = rows[0];
-                const headerHtml = headerRow.map(header => `<th>${header}</th>`).join('');
-                document.getElementById('tableHeader').innerHTML = headerHtml;
-
-                // Render Data Rows
-                const dataRows = rows.slice(1);
-                const bodyHtml = dataRows.map(row => {
-                    return `<tr>${row.map(cell => `<td>${cell}</td>`).join('')}</tr>`;
-                }).join('');
-                document.getElementById('tableBody').innerHTML = bodyHtml;
-
+                renderHeader();
+                renderTable();
+                showToast("Data loaded successfully");
             } catch (error) {
-                console.error('Error fetching Google Sheet data:', error);
+                console.error("Error fetching data:", error);
+                showToast("Failed to fetch data from server");
             }
         }
 
-        // Fetch data on page load
+        function renderHeader() {
+            let headerHtml = sheetHeaders.map(h => `<th>${h}</th>`).join('');
+            headerHtml += `<th>Actions</th>`;
+            document.getElementById('tableHeader').innerHTML = headerHtml;
+        }
+
+        function renderTable() {
+            const bodyHtml = appointmentData.map((item) => {
+                const row = item.values;
+                const rowIndex = item.rowIndex;
+
+                let cellsHtml = row.map((cell, colIndex) => {
+                    // Make cells editable dynamically (except Timestamp or Booking Ref if preferred)
+                    return `<td contenteditable="true" 
+                                onblur="updateCell(${rowIndex}, ${colIndex}, this.innerText)">
+                                ${cell !== null && cell !== undefined ? cell : ''}
+                            </td>`;
+                }).join('');
+
+                // Map row columns based on standard index positions
+                // 0: Timestamp, 1: Name, 2: Mobile, 3: Email, 4: Service, 5: Date, 6: Time, 7: Ref
+                const name = row[1] || '';
+                const email = row[3] || '';
+                const service = row[4] || '';
+                const date = row[5] || '';
+                const time = row[6] || '';
+                const ref = row[7] || '';
+
+                const actionsHtml = `
+                    <td>
+                        <button class="action-btn btn-reminder" 
+                                onclick="sendReminder('${email}', '${name}', '${ref}', '${service}', '${date}', '${time}')">
+                            Reminder
+                        </button>
+                        <button class="action-btn btn-cancel" 
+                                onclick="sendCancellation('${email}', '${name}', '${ref}', '${date}', '${time}')">
+                            Cancel
+                        </button>
+                    </td>
+                `;
+
+                return `<tr>${cellsHtml}${actionsHtml}</tr>`;
+            }).join('');
+
+            document.getElementById('tableBody').innerHTML = bodyHtml;
+        }
+
+        async function updateCell(rowIndex, columnIndex, newValue) {
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({
+                        action: 'updateRow',
+                        rowIndex: rowIndex,
+                        columnIndex: columnIndex,
+                        newValue: newValue
+                    })
+                });
+                const res = await response.json();
+                if (res.status === 'success') {
+                    showToast('Sheet cell updated!');
+                }
+            } catch (err) {
+                console.error('Update failed:', err);
+                showToast('Failed to update cell');
+            }
+        }
+
+        async function sendCancellation(email, name, ref, date, time) {
+            if (!email) {
+                alert("No email address available for this customer.");
+                return;
+            }
+
+            const reason = prompt(`Enter cancellation reason for ${name}:`, "Slot busy / Unforeseen work");
+            if (reason === null) return; // User cancelled prompt
+
+            showToast("Sending cancellation email...");
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({
+                        action: 'sendCancellation',
+                        recipientEmail: email,
+                        customerName: name,
+                        bookingRef: ref,
+                        appointmentDate: date,
+                        visitingTime: time,
+                        reason: reason
+                    })
+                });
+                const res = await response.json();
+                showToast(res.message);
+            } catch (err) {
+                console.error('Cancellation failed:', err);
+                showToast('Failed to send cancellation email');
+            }
+        }
+
+        async function sendReminder(email, name, ref, service, date, time) {
+            if (!email) {
+                alert("No email address available for this customer.");
+                return;
+            }
+
+            if (!confirm(`Send appointment reminder email to ${name} (${email})?`)) return;
+
+            showToast("Sending reminder email...");
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({
+                        action: 'sendReminder',
+                        recipientEmail: email,
+                        customerName: name,
+                        bookingRef: ref,
+                        service: service,
+                        appointmentDate: date,
+                        visitingTime: time
+                    })
+                });
+                const res = await response.json();
+                showToast(res.message);
+            } catch (err) {
+                console.error('Reminder failed:', err);
+                showToast('Failed to send reminder email');
+            }
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.innerText = msg;
+            toast.style.display = 'block';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+
+        // Fetch data initially on page load
         fetchSheetData();
 
-        // Auto-refresh data every 10 seconds
-        setInterval(fetchSheetData, 10000);
+        // Auto-refresh data every 30 seconds
+        setInterval(fetchSheetData, 30000);
     </script>
 
 </body>
